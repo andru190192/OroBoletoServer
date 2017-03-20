@@ -1,0 +1,26 @@
+{
+  "name": "oroticketserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adrianconza/OroTicketServer.git"
+  },
+  "author": "OroCodigo Developers",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/adrianconza/OroTicketServer/issues"
+  },
+  "homepage": "https://github.com/adrianconza/OroTicketServer#readme",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "pg": "^6.1.5",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^3.30.2"
+  }
+}

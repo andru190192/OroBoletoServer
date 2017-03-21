@@ -6,7 +6,7 @@ const sequelize = new Sequelize(config.db ,
   {
     dialect: 'postgres',
     protocol: 'postgres',
-    logging: true,
+    //logging: true,
     timestamps: false
   });
 

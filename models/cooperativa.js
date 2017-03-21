@@ -16,7 +16,7 @@ module.exports = sequelize.define(
   'cooperativa',
   CooperativaSchema,
   {
-    schema: 'prueba',
+    schema: 'oroticket',
     freezeTableName: true,
     timestamps: false
   })

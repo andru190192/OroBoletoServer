@@ -3,10 +3,10 @@
 const {Sequelize, sequelize} = require('./sequelizeConf')
 
 const CooperativaSchema = {
-  codigo: { type: Sequelize.STRING, primaryKey: true },
-  ruc: Sequelize.STRING,
-  nombre: Sequelize.STRING,
-  gerente: Sequelize.STRING,
+  codigo: { type: Sequelize.STRING, primaryKey: true, allowNull: false },
+  ruc: { type: Sequelize.STRING, allowNull: false },
+  nombre: { type: Sequelize.STRING, allowNull: false },
+  gerente: { type: Sequelize.STRING, allowNull: false },
   telefono: Sequelize.STRING,
   correo: Sequelize.STRING,
   matriz: Sequelize.STRING

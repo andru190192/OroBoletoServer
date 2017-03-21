@@ -1,7 +1,7 @@
 {
   "name": "oroticketserver",
   "version": "1.0.0",
-  "description": "API OroTicketServer",
+  "description": "API RESTful OroTicketServer",
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/adrianconza/OroTicketServer.git"
   },
-  "author": "OroCodigo Developers",
+  "author": "OroCodigo Developers (www.orocodigo.com)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/adrianconza/OroTicketServer/issues"

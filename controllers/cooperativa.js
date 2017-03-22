@@ -15,7 +15,7 @@ function getCooperativa (req, res) {
 function getCooperativas (req, res) {
   Cooperativa.findAll()
   .then(cooperativas => {
-    if(cooperativas.length <= 0) return res.status(404).send({ message: 'No existen cooperativas' })
+    if(cooperativas.length <= 0) return res.status(404).send({ message: `No existen cooperativas` })
     res.status(200).send({ cooperativas })
   })
   .catch(err => res.status(500).send({ message: `Error al realizar la consulta: ${err}` }))

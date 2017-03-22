@@ -1,16 +1,8 @@
 'use strict'
 
-const Sequelize = require('sequelize')
+const { sequelize } = require('./models/sequelizeConf')
 const app = require('./app')
 const config = require('./config')
-
-const sequelize = new Sequelize(config.db ,
-  {
-    dialect: 'postgres',
-    protocol: 'postgres',
-    //logging: true,
-    timestamps: false
-  });
 
 sequelize.authenticate()
 .then(() => {

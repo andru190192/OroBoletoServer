@@ -19,7 +19,7 @@ const CooperativaSchema = {
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar un numero de RUC para la Cooperativa' },
       isNumeric: { args: true, msg: 'El RUC de la cooperativa debe tener solo numeros' },
-      len: { args: 13, msg: 'El RUC de la Cooperativa debe tener 13 digitos' },
+      len: { args: [13,13], msg: 'El RUC de la Cooperativa debe tener 13 digitos' },
       isUnique: isUnique('cooperativa', 'ruc')
     }
   },
@@ -28,7 +28,7 @@ const CooperativaSchema = {
     allowNull: false,
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar un nombre para la Cooperativa' },
-      is: { args: ["^[a-z]+$",'i'], msg: 'El nombre de la Cooperativa debe tener solo letras' }
+      is: { args: ['^[a-z ]+$','i'], msg: 'El nombre de la Cooperativa debe tener solo letras' }
     },
     set: function(valNombre) { return this.setDataValue('nombre', valNombre.toUpperCase()) }
   },
@@ -37,7 +37,7 @@ const CooperativaSchema = {
     allowNull: false,
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar un nombre de Gerente' },
-      is: { args: ["^[a-z]+$",'i'], msg: 'El nombre del Gerente debe tener solo letras' }
+      is: { args: ['^[a-z ]+$','i'], msg: 'El nombre del Gerente debe tener solo letras' }
     },
     set: function(valGerente) { return this.setDataValue('gerente', valGerente.toUpperCase()) }
   },

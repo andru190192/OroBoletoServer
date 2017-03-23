@@ -10,7 +10,21 @@ const sequelize = new Sequelize(config.db ,
     timestamps: false
   });
 
+function isUnique (modelName, field) {
+  return (value, next) => {
+      const Model = require(`./${modelName}`)
+      const query = {}
+      query[field] = value
+      Model.find({ where: query, attributes: [field] })
+      .then(obj => {
+        if (obj)  next(`El ${field} '${value}' ya esta en uso. Debe ingresar otro ${field}`)
+        next()
+      })
+    }
+}
+
 module.exports = {
   Sequelize,
-  sequelize
+  sequelize,
+  isUnique
 }

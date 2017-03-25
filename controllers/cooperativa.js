@@ -6,7 +6,7 @@ function getCooperativa (req, res) {
   let cooperativaId = req.params.cooperativaId
   Cooperativa.findById(cooperativaId)
   .then(cooperativa => {
-    if(!cooperativa) return res.status(404).send({ message: `La cooperativa ${cooperativaId} no existe` })
+    if(!cooperativa) return res.status(404).send({ message: `La cooperativa '${cooperativaId}' no existe` })
     res.status(200).send({ cooperativa })
   })
   .catch(err => res.status(500).send({ message: `Error al realizar la consulta: ${err}` }))

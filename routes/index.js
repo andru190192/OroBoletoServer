@@ -13,6 +13,12 @@ api.put('/cooperativa/:cooperativaId', auth, cooperativaCtrl.updateCooperativa)
 api.delete('/cooperativa/:cooperativaId', auth, cooperativaCtrl.deleteCooperativa)
 
 
+const personaCtrl = require('../controllers/persona')
+
+api.get('/persona', auth, personaCtrl.getPersonas)
+api.get('/persona/:personaId', auth, personaCtrl.getPersona)
+api.post('/persona', auth, personaCtrl.savePersona)
+
 const authCtrl = require('../controllers/auth')
 
 api.post('/signUp', authCtrl.signUp)

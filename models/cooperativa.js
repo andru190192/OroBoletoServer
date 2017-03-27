@@ -13,6 +13,7 @@ const CooperativaSchema = {
     },
     set: function(valCodigo) { return this.setDataValue('codigo', valCodigo.toUpperCase()) }
   },
+
   ruc: {
     type: Sequelize.STRING,
     allowNull: false,
@@ -23,6 +24,7 @@ const CooperativaSchema = {
       isUnique: isUnique('cooperativa', 'ruc')
     }
   },
+
   nombre: {
     type: Sequelize.STRING,
     allowNull: false,
@@ -32,6 +34,7 @@ const CooperativaSchema = {
     },
     set: function(valNombre) { return this.setDataValue('nombre', valNombre.toUpperCase()) }
   },
+
   gerente: {
     type: Sequelize.STRING,
     allowNull: false,
@@ -41,6 +44,7 @@ const CooperativaSchema = {
     },
     set: function(valGerente) { return this.setDataValue('gerente', valGerente.toUpperCase()) }
   },
+
   telefono: {
     type: Sequelize.STRING,
     allowNull: true,
@@ -50,6 +54,7 @@ const CooperativaSchema = {
       isNumeric: { args: true, msg: 'El numero de telefono debe tener solo numeros' }
     }
   },
+
   correo: {
     type: Sequelize.STRING,
     allowNull: true,
@@ -61,6 +66,7 @@ const CooperativaSchema = {
     },
     set: function(valCorreo) { return this.setDataValue('correo', valCorreo.toLowerCase()) }
   },
+  
   matriz: {
     type: Sequelize.STRING,
     allowNull: true,

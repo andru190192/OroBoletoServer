@@ -15,6 +15,7 @@ api.get('/ciudadOrigen', auth, (req, res) => {
     origen: ['Machala', 'Guayaquil', 'Cuenca']
   })
 })
+
 api.get('/ciudadDestino/:origenId', auth, (req, res) => {
   const origenId = req.params.origenId
   console.log(origenId)
@@ -24,6 +25,7 @@ api.get('/ciudadDestino/:origenId', auth, (req, res) => {
     origen: ciudadades
   })
 })
+
 
 const cooperativaCtrl = require('../controllers/cooperativa')
 api.get('/cooperativa', auth, cooperativaCtrl.getCooperativas)
@@ -37,5 +39,14 @@ const personaCtrl = require('../controllers/persona')
 api.get('/persona', auth, personaCtrl.getPersonas)
 api.get('/persona/:personaId', auth, personaCtrl.getPersona)
 api.post('/persona', auth, personaCtrl.savePersona)
+api.put('/persona/:personaId', auth, personaCtrl.updatePersona)
+api.delete('/persona/:personaId', auth, personaCtrl.deletePersona)
+
+
+const rutaCtrl = require('../controllers/ruta')
+api.get('/ruta/:cooperativaId', auth, rutaCtrl.getRutas)
+api.get('/ruta/:cooperativaId/:origenId/:destinoId', auth, rutaCtrl.getRuta)
+
+
 
 module.exports = api

@@ -1,5 +1,6 @@
 'use strict'
 
+const {sequelize} = require('../models/sequelizeConf')
 const Ruta = require('../models/ruta')
 
 function getRuta (req, res) {
@@ -24,6 +25,25 @@ function getRutas (req, res) {
   .catch(err => res.status(500).send({ message: `Error al realizar la consulta: ${err}` }))
 }
 
+function getCiudadOrigen (req, res) {
+  sequelize.query('SELECT * FROM oroticket.fun_ciudad_origen();', { type: sequelize.QueryTypes.SELECT })
+  .then(ciudades => {
+    if(ciudades.length <= 0) return res.status(404).send({ message: `No hay Ciudadades de Origen` })
+    res.status(200).send({ ciudades })
+  })
+  .catch(err => res.status(500).send({ message: `Error al realizar la consulta: ${err}` }))
+}
+
+function getCiudadDestino (req, res) {
+  let origenId = req.params.origenId.toUpperCase()
+  sequelize.query(`SELECT * FROM oroticket.fun_ciudad_destino('${origenId}');`, { type: sequelize.QueryTypes.SELECT })
+  .then(ciudades => {
+    if(ciudades.length <= 0) return res.status(404).send({ message: `No hay Ciudadades de Destino con el Origen: ${origenId}` })
+    res.status(200).send({ ciudades })
+  })
+  .catch(err => res.status(500).send({ message: `Error al realizar la consulta: ${err}` }))
+}
+
 function saveRuta (req, res) {
   let ruta = req.body
   Ruta.create(ruta)
@@ -36,5 +56,7 @@ function saveRuta (req, res) {
 module.exports = {
   getRuta,
   getRutas,
+  getCiudadOrigen,
+  getCiudadDestino,
   saveRuta
 }

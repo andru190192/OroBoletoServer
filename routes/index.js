@@ -10,23 +10,6 @@ api.post('/signUp', authCtrl.signUp)
 api.post('/signIn', authCtrl.signIn)
 
 
-api.get('/ciudadOrigen', auth, (req, res) => {
-  res.status(200).send({
-    origen: ['Machala', 'Guayaquil', 'Cuenca']
-  })
-})
-
-api.get('/ciudadDestino/:origenId', auth, (req, res) => {
-  const origenId = req.params.origenId
-  console.log(origenId)
-  const ciudadades = ['Machala', 'Guayaquil', 'Cuenca']
-  ciudadades.splice(ciudadades.indexOf(origenId), 1)
-  res.status(200).send({
-    origen: ciudadades
-  })
-})
-
-
 const cooperativaCtrl = require('../controllers/cooperativa')
 api.get('/cooperativa', auth, cooperativaCtrl.getCooperativas)
 api.get('/cooperativa/:cooperativaId',  auth, cooperativaCtrl.getCooperativa)
@@ -46,6 +29,8 @@ api.delete('/persona/:personaId', auth, personaCtrl.deletePersona)
 const rutaCtrl = require('../controllers/ruta')
 api.get('/ruta/:cooperativaId', auth, rutaCtrl.getRutas)
 api.get('/ruta/:cooperativaId/:origenId/:destinoId', auth, rutaCtrl.getRuta)
+api.get('/rutas/ciudadOrigen', auth, rutaCtrl.getCiudadOrigen)
+api.get('/rutas/ciudadDestino/:origenId', auth, rutaCtrl.getCiudadDestino)
 api.post('/ruta', auth, rutaCtrl.saveRuta)
 
 

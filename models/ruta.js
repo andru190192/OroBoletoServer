@@ -3,7 +3,7 @@
 const {Sequelize, sequelize} = require('./sequelizeConf')
 
 const RutaSchema = {
-  cooperativa: { type: Sequelize.STRING, primaryKey: true, allowNull: false },
+  cooperativa: { type: Sequelize.STRING, allowNull: false },
   origen: { type: Sequelize.STRING, primaryKey: true, allowNull: false },
   destino: { type: Sequelize.STRING, primaryKey: true, allowNull: false },
   tiempoViaje: { type: Sequelize.DATE, field: 'tiempo_viaje' },

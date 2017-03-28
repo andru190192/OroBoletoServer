@@ -46,7 +46,7 @@ api.delete('/persona/:personaId', auth, personaCtrl.deletePersona)
 const rutaCtrl = require('../controllers/ruta')
 api.get('/ruta/:cooperativaId', auth, rutaCtrl.getRutas)
 api.get('/ruta/:cooperativaId/:origenId/:destinoId', auth, rutaCtrl.getRuta)
-
+api.post('/ruta', auth, rutaCtrl.saveRuta)
 
 
 module.exports = api

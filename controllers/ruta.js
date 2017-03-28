@@ -18,14 +18,23 @@ function getRutas (req, res) {
   let cooperativaId = req.params.cooperativaId
   Ruta.findAll({ where: { cooperativa: cooperativaId } })
   .then(rutas => {
-    if(!rutas) return res.status(404).send({ message: `La cooperativa '${cooperativaId}' no tiene rutas` })
+    if(rutas.length <= 0) return res.status(404).send({ message: `La cooperativa '${cooperativaId}' no tiene rutas` })
     res.status(200).send({ rutas })
   })
   .catch(err => res.status(500).send({ message: `Error al realizar la consulta: ${err}` }))
 }
 
+function saveRuta (req, res) {
+  let ruta = req.body
+  Ruta.create(ruta)
+  .then(rutaStored => {
+    res.status(200).send({ ruta: rutaStored })
+  })
+  .catch(err => res.status(500).send({ message: `Error al guardar la informacion de la ruta: ${err}` }))
+}
 
 module.exports = {
   getRuta,
-  getRutas
+  getRutas,
+  saveRuta
 }

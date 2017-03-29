@@ -37,7 +37,8 @@ api.delete('/ruta/:cooperativaId/:origenId/:destinoId', auth, rutaCtrl.deleteRut
 
 
 const turnoCtrl = require('../controllers/turno')
-api.get('/turno/:cooperativaId', auth, turnoCtrl.getTurnos)
-api.get('/turno/:cooperativaId/:origenId/:destinoId', auth, turnoCtrl.getTurno)
+api.get('/turno/:cooperativaId/:origenId/:destinoId', auth, turnoCtrl.getTurnos)
+api.get('/turno/:codigoId', auth, turnoCtrl.getTurno)
+api.get('/turnos/:origenId/:destinoId/:fecha', auth, turnoCtrl.getTurnosPorFecha)
 
 module.exports = api

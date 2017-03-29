@@ -32,6 +32,12 @@ api.get('/ruta/:cooperativaId/:origenId/:destinoId', auth, rutaCtrl.getRuta)
 api.get('/rutas/ciudadOrigen', auth, rutaCtrl.getCiudadOrigen)
 api.get('/rutas/ciudadDestino/:origenId', auth, rutaCtrl.getCiudadDestino)
 api.post('/ruta', auth, rutaCtrl.saveRuta)
+api.put('/ruta/:cooperativaId/:origenId/:destinoId', auth, rutaCtrl.updateRuta)
+api.delete('/ruta/:cooperativaId/:origenId/:destinoId', auth, rutaCtrl.deleteRuta)
 
+
+const turnoCtrl = require('../controllers/turno')
+api.get('/turno/:cooperativaId', auth, turnoCtrl.getTurnos)
+api.get('/turno/:cooperativaId/:origenId/:destinoId', auth, turnoCtrl.getTurno)
 
 module.exports = api

@@ -46,6 +46,7 @@ function getCiudadDestino (req, res) {
 
 function saveRuta (req, res) {
   let ruta = req.body
+  console.log(req.body.tiempoViaje)
   Ruta.create(ruta)
   .then(rutaStored => {
     res.status(200).send({ ruta: rutaStored })
@@ -53,10 +54,37 @@ function saveRuta (req, res) {
   .catch(err => res.status(500).send({ message: `Error al guardar la informacion de la ruta: ${err}` }))
 }
 
+function updateRuta (req, res) {
+  let cooperativaId = req.params.cooperativaId
+  let origenId = req.params.origenId
+  let destinoId = req.params.destinoId
+  let ruta = req.body
+  Ruta.update(ruta, { where: { cooperativa: cooperativaId, origen: origenId, destino:  destinoId }, returning: true })
+  .then((rutaUpdate) => {
+    if(rutaUpdate[0] <= 0) return res.status(404).send({ message: `La ruta '${origenId} - ${destinoId} de la cooperativa ${cooperativaId}' no existe` })
+    res.status(200).send({ ruta: rutaUpdate[1] })
+  })
+  .catch(err => res.status(500).send({ message: `Error al actualizar la informacion de la ruta en la base de datos: ${err}` }))
+}
+
+function deleteRuta (req, res) {
+  let cooperativaId = req.params.cooperativaId
+  let origenId = req.params.origenId
+  let destinoId = req.params.destinoId
+  Ruta.destroy({ where: { cooperativa: cooperativaId, origen: origenId, destino:  destinoId } })
+  .then(rutaCountDelete => {
+    if(rutaCountDelete <= 0) return res.status(404).send({ message: `La ruta '${origenId} - ${destinoId} de la cooperativa ${cooperativaId}' no existe` })
+    res.status(200).send({ message: `La ruta '${origenId} - ${destinoId} de la cooperativa ${cooperativaId}' ha sido eliminada` })
+  })
+  .catch(err => res.status(500).send({ message: `Error al eliminar la informacion de la ruta en la base de datos: ${err}` }))
+}
+
 module.exports = {
   getRuta,
   getRutas,
   getCiudadOrigen,
   getCiudadDestino,
-  saveRuta
+  saveRuta,
+  updateRuta,
+  deleteRuta
 }

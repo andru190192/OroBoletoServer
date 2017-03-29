@@ -7,22 +7,41 @@ const TurnoSchema = {
   codigo: {
     type: Sequelize.STRING,
     primaryKey: true,
-    allowNull: false
+    allowNull: false,
+    validate: {
+      notEmpty: { args: true, msg: 'Debe ingresar un codigo para el turno' }
+    },
+    set: function(valCodigo) { return this.setDataValue('codigo', valCodigo.toUpperCase()) }
   },
 
   cooperativa: {
     type: Sequelize.STRING,
-    allowNull: false
+    allowNull: false,
+    validate: {
+      notEmpty: { args: true, msg: 'Debe ingresar el codigo de una cooperativa para asignar el turno' },
+      is: { args: ['^[a-z ]+$','i'], msg: 'El codigo de la cooperativa debe tener solo letras' }
+    },
+    set: function(valCooperativa) { return this.setDataValue('cooperativa', valCooperativa.toUpperCase()) }
   },
 
   origen: {
     type: Sequelize.STRING,
-    allowNull: false
+    allowNull: false,
+    validate: {
+      notEmpty: { args: true, msg: 'Debe ingresar el nombre de la ciudad de origen' },
+      is: { args: ['^[a-z ]+$','i'], msg: 'El nombre de la ciudad de origen debe tener solo letras' }
+    },
+    set: function(valOrigen) { return this.setDataValue('origen', valOrigen.toUpperCase()) }
   },
 
   destino: {
     type: Sequelize.STRING,
-    allowNull: false
+    allowNull: false,
+    validate: {
+      notEmpty: { args: true, msg: 'Debe ingresar el nombre de la ciudad de destino' },
+      is: { args: ['^[a-z ]+$','i'], msg: 'El nombre de la ciudad de destino debe tener solo letras' }
+    },
+    set: function(valDestino) { return this.setDataValue('destino', valDestino.toUpperCase()) }
   },
 
   horaSalida: {

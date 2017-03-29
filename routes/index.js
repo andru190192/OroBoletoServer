@@ -11,7 +11,7 @@ api.post('/signIn', authCtrl.signIn)
 
 
 const cooperativaCtrl = require('../controllers/cooperativa')
-api.get('/cooperativa', auth, cooperativaCtrl.getCooperativas)
+api.get('/cooperativas', auth, cooperativaCtrl.getCooperativas)
 api.get('/cooperativa/:cooperativaId',  auth, cooperativaCtrl.getCooperativa)
 api.post('/cooperativa', auth, cooperativaCtrl.saveCooperativa)
 api.put('/cooperativa/:cooperativaId', auth, cooperativaCtrl.updateCooperativa)
@@ -19,7 +19,7 @@ api.delete('/cooperativa/:cooperativaId', auth, cooperativaCtrl.deleteCooperativ
 
 
 const personaCtrl = require('../controllers/persona')
-api.get('/persona', auth, personaCtrl.getPersonas)
+api.get('/personas', auth, personaCtrl.getPersonas)
 api.get('/persona/:personaId', auth, personaCtrl.getPersona)
 api.post('/persona', auth, personaCtrl.savePersona)
 api.put('/persona/:personaId', auth, personaCtrl.updatePersona)
@@ -27,7 +27,7 @@ api.delete('/persona/:personaId', auth, personaCtrl.deletePersona)
 
 
 const rutaCtrl = require('../controllers/ruta')
-api.get('/ruta/:cooperativaId', auth, rutaCtrl.getRutas)
+api.get('/rutas/:cooperativaId', auth, rutaCtrl.getRutas)
 api.get('/ruta/:cooperativaId/:origenId/:destinoId', auth, rutaCtrl.getRuta)
 api.get('/rutas/ciudadOrigen', auth, rutaCtrl.getCiudadOrigen)
 api.get('/rutas/ciudadDestino/:origenId', auth, rutaCtrl.getCiudadDestino)
@@ -40,5 +40,7 @@ const turnoCtrl = require('../controllers/turno')
 api.get('/turno/:cooperativaId/:origenId/:destinoId', auth, turnoCtrl.getTurnos)
 api.get('/turno/:codigoId', auth, turnoCtrl.getTurno)
 api.get('/turnos/:origenId/:destinoId/:fecha', auth, turnoCtrl.getTurnosPorFecha)
+api.post('/turno', auth, turnoCtrl.saveTurno)
+
 
 module.exports = api

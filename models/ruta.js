@@ -9,7 +9,8 @@ const RutaSchema = {
     allowNull: false,
     validate: {
       notEmpty: { args: true, msg: 'Debe seleccionar una cooperativa para asignar la ruta' }
-    }
+    },
+    set: function(valCooperativa) { return this.setDataValue('cooperativa', valCooperativa.toUpperCase()) }
   },
 
   origen: {
@@ -45,7 +46,7 @@ const RutaSchema = {
     },
     get: function() {
       if(this.getDataValue('tiempoViaje') !== undefined && this.getDataValue('tiempoViaje') !== null)
-        return moment(this.getDataValue('tiempoViaje'), 'EEE MMM dd yyyy HH:mm:ss (zzzz)').format('HH:mm');
+        return moment(this.getDataValue('tiempoViaje'), 'EEE MMM dd yyyy HH:mm:ss (zzzz)').format('HH:mm')
       else
         return '00:00'
     },

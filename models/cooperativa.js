@@ -1,6 +1,6 @@
 'use strict'
 
-const {Sequelize, sequelize, isUnique} = require('./sequelizeConf')
+const { Sequelize, sequelize, isUnique } = require('./sequelizeConf')
 
 const CooperativaSchema = {
   codigo: {
@@ -66,7 +66,7 @@ const CooperativaSchema = {
     },
     set: function(valCorreo) { return this.setDataValue('correo', valCorreo.toLowerCase()) }
   },
-  
+
   matriz: {
     type: Sequelize.STRING,
     allowNull: true,

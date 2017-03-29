@@ -1,6 +1,6 @@
 'use strict'
 
-const {Sequelize, sequelize, isUnique} = require('./sequelizeConf')
+const { Sequelize, sequelize, isUnique } = require('./sequelizeConf')
 
 const PersonaSchema = {
   cedulaRuc: {

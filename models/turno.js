@@ -1,6 +1,7 @@
 'use strict'
 
 const {Sequelize, sequelize} = require('./sequelizeConf')
+const moment = require('moment')
 
 const TurnoSchema = {
   codigo: {
@@ -27,13 +28,19 @@ const TurnoSchema = {
   horaSalida: {
     type: Sequelize.DATE,
     field: 'hora_salida',
-    allowNull: false
+    allowNull: false,
+    get: function() {
+      return moment(this.getDataValue('horaSalida'), 'EEE MMM dd yyyy HH:mm:ss (zzzz)').format('HH:mm');
+    }
   },
 
   horaLlegada: {
     type: Sequelize.STRING,
     field: 'hora_llegada',
-    allowNull: false
+    allowNull: false,
+    get: function() {
+      return moment(this.getDataValue('horaLlegada'), 'EEE MMM dd yyyy HH:mm:ss (zzzz)').format('HH:mm');
+    }
   },
 }
 

@@ -46,7 +46,7 @@ function saveTurno (req, res) {
   Ruta.findOne({ where: { cooperativa: cooperativaId, origen: origenId, destino: destinoId} })
   .then(ruta => {
     if(!ruta)
-      return res.status(404).send({ message: `La Cooperativa '${cooperativaId}' no tiene asignada una ruta con el Origen: '${origenId}' y el Destino: '${destinoId}'` })
+      return res.status(404).send({ message: `La Cooperativa '${cooperativaId}' no tiene una ruta con el Origen: '${origenId}' y el Destino: '${destinoId}'` })
     else {
       Turno.create(turno)
       .then(turnoStored => {

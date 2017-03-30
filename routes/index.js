@@ -44,13 +44,18 @@ api.post('/turno', auth, turnoCtrl.saveTurno)
 api.put('/turno/:turnoId', auth, turnoCtrl.updateTurno)
 api.delete('/turno/:turnoId', auth, turnoCtrl.deleteTurno)
 
+
 const formaPagoCtrl = require('../controllers/formaPago')
-api.get('/formaPago/:clienteId', auth, formaPagoCtrl.getFormasPagos)
+api.get('/formasPago/:clienteId', auth, formaPagoCtrl.getFormasPagos)
 api.get('/formaPago/:formaPagoId',  auth, formaPagoCtrl.getFormaPago)
 api.post('/formaPago', auth, formaPagoCtrl.saveFormaPago)
 api.put('/formaPago/:formaPagoId', auth, formaPagoCtrl.updateFormaPago)
 api.delete('/formaPago/:formaPagoId', auth, formaPagoCtrl.deleteFormaPago)
 
+
+const boletoCtrl = require('../controllers/boleto')
+api.get('/boletos/:clienteId', auth, boletoCtrl.getBoletos)
+api.get('/boleto/:boletoId', auth, boletoCtrl.getBoleto)
 
 
 module.exports = api

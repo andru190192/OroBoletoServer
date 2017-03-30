@@ -2,6 +2,7 @@
 
 const {sequelize} = require('../models/sequelizeConf')
 const Ruta = require('../models/ruta')
+const Cooperativa = require('../models/cooperativa')
 
 function getRuta (req, res) {
   let cooperativaId = req.params.cooperativaId
@@ -46,12 +47,20 @@ function getCiudadDestino (req, res) {
 
 function saveRuta (req, res) {
   let ruta = req.body
-  console.log(req.body.tiempoViaje)
-  Ruta.create(ruta)
-  .then(rutaStored => {
-    res.status(200).send({ ruta: rutaStored })
+  let cooperativaId = ruta.cooperativa
+  Cooperativa.findOne({ where: { codigo: cooperativaId } })
+  .then(cooperativa => {
+    if(!cooperativa)
+      return res.status(404).send({ message: `No puede crear la ruta porque la  Cooperativa con Codigo ${cooperativaId} no existe` })
+    else{
+      Ruta.create(ruta)
+      .then(rutaStored => {
+        res.status(200).send({ ruta: rutaStored })
+      })
+      .catch(err => res.status(500).send({ message: `Error al guardar la informacion de la ruta: ${err}` }))
+    }
   })
-  .catch(err => res.status(500).send({ message: `Error al guardar la informacion de la ruta: ${err}` }))
+  .catch(err => res.status(500).send({ message: `Error al realizar la consulta: ${err}` }))
 }
 
 function updateRuta (req, res) {

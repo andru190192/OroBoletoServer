@@ -77,7 +77,7 @@ const RutaSchema = {
     allowNull: false,
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar el precio del boleto' },
-      is: { args: ['^[0-9.]+$','i'], msg: 'El precio del boleto debe tener solo numeros, ejem: 10.00' }
+      is: { args: ['^[0-9.]+$','i'], msg: 'El precio del boleto debe tener solo numeros, ej: 10.00' }
     }
   }
 }

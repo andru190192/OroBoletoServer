@@ -1,6 +1,6 @@
 'use strict'
 
-const {Sequelize, sequelize} = require('./sequelizeConf')
+const { Sequelize, sequelize } = require('./sequelizeConf')
 
 const BitacoraSchema = {
   id: {
@@ -8,7 +8,7 @@ const BitacoraSchema = {
     primaryKey: true,
     allowNull: false
   },
-  detalle: { 
+  detalle: {
     type: Sequelize.STRING,
     allowNull: false
   }

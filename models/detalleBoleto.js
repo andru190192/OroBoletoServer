@@ -1,6 +1,6 @@
 'use strict'
 
-const {Sequelize, sequelize} = require('./sequelizeConf')
+const { Sequelize, sequelize } = require('./sequelizeConf')
 
 const DetalleBoletoSchema = {
   numeroFactura: { type: Sequelize.STRING, field: 'numero_factura', allowNull: false },

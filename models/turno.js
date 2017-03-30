@@ -1,6 +1,6 @@
 'use strict'
 
-const {Sequelize, sequelize} = require('./sequelizeConf')
+const { Sequelize, sequelize } = require('./sequelizeConf')
 const moment = require('moment')
 
 const TurnoSchema = {
@@ -10,7 +10,7 @@ const TurnoSchema = {
     allowNull: true,
     defaultValue: null,
     validate: {
-      notEmpty: { args: true, msg: 'Debe ingresar un codigo para el turno' }
+      notEmpty: { args: true, msg: 'Debe ingresar un Codigo para el Turno' }
     },
     set: function(valCodigo) { return this.setDataValue('codigo', valCodigo.toUpperCase()) }
   },
@@ -19,8 +19,8 @@ const TurnoSchema = {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
-      notEmpty: { args: true, msg: 'Debe ingresar el codigo de una cooperativa para asignar el turno' },
-      is: { args: ['^[a-z ]+$','i'], msg: 'El codigo de la cooperativa debe tener solo letras' }
+      notEmpty: { args: true, msg: 'Debe ingresar el Codigo de una Cooperativa para asignar el Turno' },
+      is: { args: ['^[a-z ]+$','i'], msg: 'El Codigo de la Cooperativa debe tener solo letras' }
     },
     set: function(valCooperativa) { return this.setDataValue('cooperativa', valCooperativa.toUpperCase()) }
   },
@@ -63,7 +63,7 @@ const TurnoSchema = {
   },
 
   horaLlegada: {
-    type: Sequelize.STRING,
+    type: Sequelize.DATE,
     field: 'hora_llegada',
     allowNull: false,
     validate:{

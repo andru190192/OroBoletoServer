@@ -1,6 +1,6 @@
 'use strict'
 
-const {Sequelize, sequelize} = require('./sequelizeConf')
+const { Sequelize, sequelize } = require('./sequelizeConf')
 
 const TurnoVehiculoSchema = {
   turno: { type: Sequelize.STRING, primaryKey: true, allowNull: false },

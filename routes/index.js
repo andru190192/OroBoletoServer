@@ -43,4 +43,13 @@ api.get('/turnosAppMobile/:origenId/:destinoId/:fecha', auth, turnoCtrl.getTurno
 api.post('/turno', auth, turnoCtrl.saveTurno)
 
 
+const formaPagoCtrl = require('../controllers/formaPago')
+api.get('/formaPago/:clienteId', auth, formaPagoCtrl.getFormasPagos)
+api.get('/formaPago/:formaPagoId',  auth, formaPagoCtrl.getFormaPago)
+api.post('/formaPago', auth, formaPagoCtrl.saveFormaPago)
+api.put('/formaPago/:formaPagoId', auth, formaPagoCtrl.updateFormaPago)
+api.delete('/formaPago/:formaPagoId', auth, formaPagoCtrl.deleteFormaPago)
+
+
+
 module.exports = api

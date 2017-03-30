@@ -7,7 +7,8 @@ const TurnoSchema = {
   codigo: {
     type: Sequelize.STRING,
     primaryKey: true,
-    allowNull: false,
+    allowNull: true,
+    defaultValue: null,
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar un codigo para el turno' }
     },
@@ -48,8 +49,16 @@ const TurnoSchema = {
     type: Sequelize.DATE,
     field: 'hora_salida',
     allowNull: false,
+    validate:{
+      notEmpty: { args: true, msg: 'Debe ingresar la hora de salida del turno' },
+      isDate: { args: true, msg: 'Debe ingresar un formato de hora de salida valido: hh:mm'},
+    },
     get: function() {
       return moment(this.getDataValue('horaSalida'), 'EEE MMM dd yyyy HH:mm:ss (zzzz)').format('HH:mm');
+    },
+    set: function(valSalida){
+        let hora = moment().format(`YYYY-MM-DDT${valSalida}:00Z`)
+        return this.setDataValue('horaSalida', `${hora}`)
     }
   },
 
@@ -57,8 +66,16 @@ const TurnoSchema = {
     type: Sequelize.STRING,
     field: 'hora_llegada',
     allowNull: false,
+    validate:{
+      notEmpty: { args: true, msg: 'Debe ingresar la hora de llegada del turno' },
+      isDate: { args: true, msg: 'Debe ingresar un formato de hora de llegada valido: hh:mm'},
+    },
     get: function() {
       return moment(this.getDataValue('horaLlegada'), 'EEE MMM dd yyyy HH:mm:ss (zzzz)').format('HH:mm');
+    },
+    set: function(valLlegada){
+        let hora = moment().format(`YYYY-MM-DDT${valLlegada}:00Z`)
+        return this.setDataValue('horaLlegada', `${hora}`)
     }
   },
 }

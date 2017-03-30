@@ -41,7 +41,8 @@ api.get('/turnos/:cooperativaId/:origenId/:destinoId', auth, turnoCtrl.getTurnos
 api.get('/turno/:codigoId', auth, turnoCtrl.getTurno)
 api.get('/turnosAppMobile/:origenId/:destinoId/:fecha', auth, turnoCtrl.getTurnosPorFecha)
 api.post('/turno', auth, turnoCtrl.saveTurno)
-
+api.put('/turno/:turnoId', auth, turnoCtrl.updateTurno)
+api.delete('/turno/:turnoId', auth, turnoCtrl.deleteTurno)
 
 const formaPagoCtrl = require('../controllers/formaPago')
 api.get('/formaPago/:clienteId', auth, formaPagoCtrl.getFormasPagos)

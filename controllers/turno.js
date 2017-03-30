@@ -1,6 +1,7 @@
 'use strict'
 
 const { sequelize } = require('../models/sequelizeConf')
+const Ruta = require('../models/ruta')
 const Turno = require('../models/turno')
 
 function getTurno (req, res) {
@@ -39,16 +40,50 @@ function getTurnosPorFecha (req, res) {
 
 function saveTurno (req, res) {
   let turno = req.body
-  Turno.create(turno)
-  .then(turnoStored => {
-    res.status(200).send({ turno: turnoStored })
+  let cooperativaId = turno.cooperativa.toUpperCase()
+  let origenId = turno.origen.toUpperCase()
+  let destinoId = turno.destino.toUpperCase()
+  Ruta.findOne({ where: { cooperativa: cooperativaId, origen: origenId, destino: destinoId} })
+  .then(ruta => {
+    if(!ruta)
+      return res.status(404).send({ message: `La Cooperativa '${cooperativaId}' no tiene asignada una ruta con el Origen: '${origenId}' y el Destino: '${destinoId}'` })
+    else {
+      Turno.create(turno)
+      .then(turnoStored => {
+        res.status(200).send({ turno: turnoStored })
+      })
+      .catch(err => res.status(500).send({ message: `Error al guardar la informacion de la ruta: ${err}` }))
+    }
   })
-  .catch(err => res.status(500).send({ message: `Error al guardar la informacion de la ruta: ${err}` }))
+  .catch(err => res.status(500).send({ message: `Error al realizar la consulta: ${err}` }))
+}
+
+function updateTurno (req, res) {
+  let turnoId = req.params.turnoId
+  let turno = req.body
+  Turno.update(turno, { where: { codigo: turnoId }, returning: true })
+  .then((turnoUpdate) => {
+    if(turnoUpdate[0] <= 0) return res.status(404).send({ message: `El turno ${turnoId} no existe` })
+    res.status(200).send({ turno: turnoUpdate[1] })
+  })
+  .catch(err => res.status(500).send({ message: `Error al actualizar el turno en la base de datos: ${err}` }))
+}
+
+function deleteTurno (req, res) {
+  let turnoId = req.params.turnoId
+  Turno.destroy({ where: { codigo: turnoId } })
+  .then(turnoCountDelete => {
+    if(turnoCountDelete <= 0) return res.status(404).send({ message: `El turno ${turnoId} no existe` })
+    res.status(200).send({ message: `El turno ${turnoId} ha sido eliminado` })
+  })
+  .catch(err => res.status(500).send({ message: `Error al eliminar el turno en la base de datos: ${err}` }))
 }
 
 module.exports = {
   getTurno,
   getTurnos,
   getTurnosPorFecha,
-  saveTurno
+  saveTurno,
+  updateTurno,
+  deleteTurno
 }

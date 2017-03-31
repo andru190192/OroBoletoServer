@@ -29,7 +29,8 @@ const BoletoSchema = {
     allowNull: false,
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar un Precio para el Boleto' },
-      is: { args: ['^[0-9.]+$','i'], msg: 'El Precio del Boleto debe tener solo numeros, ej: 10.00' }
+      min: { args:1, msg: 'El Precio del Boleto debe ser mayor a cero' },
+      isDecimal: { args: true, msg: 'El Precio del Boleto debe tener solo numeros, ej: 10.00' }
     }
   },
 

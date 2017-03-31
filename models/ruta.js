@@ -42,7 +42,7 @@ const RutaSchema = {
     defaultValue: null,
     validate:{
       notEmpty: { args: true, msg: 'Debe ingresar el tiempo estimado de viaje' },
-      isDate: { args: true, msg: 'Debe ingresar un formato de hora valida: hh:mm'},
+      isDate: { args: true, msg: 'Debe ingresar un formato de hora valida: hh:mm'}
     },
     get: function() {
       if(this.getDataValue('tiempoViaje') !== undefined && this.getDataValue('tiempoViaje') !== null)

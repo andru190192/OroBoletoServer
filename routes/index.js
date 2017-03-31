@@ -56,6 +56,15 @@ api.delete('/formaPago/:formaPagoId', auth, formaPagoCtrl.deleteFormaPago)
 const boletoCtrl = require('../controllers/boleto')
 api.get('/boletos/:clienteId', auth, boletoCtrl.getBoletos)
 api.get('/boleto/:boletoId', auth, boletoCtrl.getBoleto)
+api.post('/boleto', auth, boletoCtrl.saveBoleto)
+api.put('/boleto/:boletoId', auth, boletoCtrl.updateBoleto)
+api.delete('/boleto/:boletoId', auth, boletoCtrl.deleteBoleto)
 
+const vehiculoCtrl = require('../controllers/vehiculo')
+api.get('/vehiculos/:choferId', auth, vehiculoCtrl.getVehiculos)
+api.get('/vehiculo/:vehiculoId', auth, vehiculoCtrl.getVehiculo)
+api.post('/vehiculo', auth, vehiculoCtrl.saveVehiculo)
+api.put('/vehiculo/:vehiculoId', auth, vehiculoCtrl.updateVehiculo)
+api.delete('/vehiculo/:vehiculoId', auth, vehiculoCtrl.deleteVehiculo)
 
 module.exports = api

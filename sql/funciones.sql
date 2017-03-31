@@ -120,6 +120,8 @@ ALTER FUNCTION oroticket.fun_turno(text, text, date) OWNER TO orocodigo;
 DROP TRIGGER IF EXISTS tri_turno_llenar_codigo_hora_llegada ON oroticket.turno;
 DROP TRIGGER IF EXISTS tri_ruta_actualizar_hora_llegada_turno ON oroticket.ruta;
 
+-- DROP FUNCTION oroticket.tri_ruta_actualizar_hora_llegada_turno();
+-- DROP FUNCTION oroticket.tri_turno_llenar_codigo_hora_llegada();
 
 CREATE OR REPLACE FUNCTION oroticket.tri_turno_llenar_codigo_hora_llegada()
   RETURNS trigger AS
@@ -128,11 +130,13 @@ DECLARE
   secuencia integer;
   tiempo_viaje timestamp without time zone;
 BEGIN
-  secuencia := COUNT(codigo) + 1 FROM oroticket.turno WHERE cooperativa = NEW.cooperativa AND origen = NEW.origen AND destino = NEW.destino;
-  NEW.codigo := SUBSTRING(NEW.cooperativa FROM 1 FOR 1) ||
-                SUBSTRING(NEW.origen FROM 1 FOR 1) ||
-                SUBSTRING(NEW.destino FROM 1 FOR 1) ||
-                secuencia;
+  IF TG_OP='INSERT' THEN
+    secuencia := COUNT(codigo) + 1 FROM oroticket.turno WHERE cooperativa = NEW.cooperativa AND origen = NEW.origen AND destino = NEW.destino;
+    NEW.codigo := SUBSTRING(NEW.cooperativa FROM 1 FOR 1) ||
+                  SUBSTRING(NEW.origen FROM 1 FOR 1) ||
+                  SUBSTRING(NEW.destino FROM 1 FOR 1) ||
+                  secuencia;
+  END IF;
   tiempo_viaje := r.tiempo_viaje FROM oroticket.ruta r WHERE r.cooperativa = NEW.cooperativa AND r.origen = NEW.origen AND r.destino = NEW.destino;
   NEW.hora_llegada := NEW.hora_salida + CAST(EXTRACT(hour FROM tiempo_viaje) || ' hour' AS interval) + CAST(EXTRACT(minute FROM tiempo_viaje) || ' minute' AS interval);
 	RETURN NEW;
@@ -141,7 +145,7 @@ $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
 CREATE TRIGGER tri_turno_llenar_codigo_hora_llegada
-  BEFORE INSERT
+  BEFORE INSERT OR UPDATE
   ON oroticket.turno
   FOR EACH ROW
   EXECUTE PROCEDURE oroticket.tri_turno_llenar_codigo_hora_llegada();
@@ -167,3 +171,31 @@ CREATE TRIGGER tri_ruta_actualizar_hora_llegada_turno
   ON oroticket.ruta
   FOR EACH ROW
   EXECUTE PROCEDURE oroticket.tri_ruta_actualizar_hora_llegada_turno();
+
+
+--CHECK CONSTRAINT--
+
+ALTER TABLE oroticket.boleto DROP CONSTRAINT chk_validar_forma_pago;
+
+-- DROP FUNCTION oroticket.chk_validar_forma_pago(integer, text);
+
+CREATE OR REPLACE FUNCTION oroticket.chk_validar_forma_pago(integer, text)
+  RETURNS boolean AS
+$BODY$
+DECLARE
+  p_id        ALIAS FOR $1;
+  p_cliente   ALIAS FOR $2;
+
+  sw_forma_pago boolean;
+  sql text;
+BEGIN
+  sql := $$SELECT CASE WHEN count(id) = 0 THEN FALSE ELSE TRUE END
+  FROM oroticket.forma_pago WHERE id = $$ || p_id || $$ AND cliente='$$ || p_cliente || $$'$$;
+  EXECUTE sql INTO sw_forma_pago;
+  RETURN sw_forma_pago;
+END;
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER TABLE oroticket.boleto ADD CONSTRAINT chk_validar_forma_pago
+  CHECK (oroticket.chk_validar_forma_pago(forma_pago, cliente));

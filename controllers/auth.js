@@ -1,7 +1,7 @@
 'use strict'
 
 const Persona = require('../models/persona')
-const service = require('../services');
+const service = require('../services')
 
 function signUp (req, res) {
   const persona = req.body
@@ -24,7 +24,7 @@ function signIn (req, res) {
     }
   })
   .then(persona => {
-    if(!persona) return res.status(404).send({ message: `El usuario ${usuario} no existe` })
+    if (!persona) return res.status(404).send({ message: `El usuario ${usuario} no existe` })
     res.status(200).send({
       persona,
       token: service.createToken(persona)

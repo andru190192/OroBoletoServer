@@ -11,7 +11,7 @@ const VehiculoSchema = {
       notEmpty: { args: true, msg: 'Debe ingresar un Numero de Placa para el Vehiculo' },
       isUnique: isUnique('vehiculo', 'placa')
     },
-    set: function(valPlaca) { return this.setDataValue('placa', valPlaca.toUpperCase()) }
+    set: function (valPlaca) { return this.setDataValue('placa', valPlaca.toUpperCase()) }
   },
 
   tipo: {
@@ -21,7 +21,7 @@ const VehiculoSchema = {
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar un Nombre para el Tipo de Vehiculo' }
     },
-    set: function(valTipo) { return this.setDataValue('tipo', valTipo.toUpperCase()) }
+    set: function (valTipo) { return this.setDataValue('tipo', valTipo.toUpperCase()) }
   },
 
   numeroAsientos: {
@@ -49,7 +49,7 @@ const VehiculoSchema = {
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar el Numero de Cedula o RUC para el Chofer del Vehiculo' },
       isNumeric: { args: true, msg: 'El Numero de Cedula o RUC del Chofer no debe tener letras' },
-      len: { args: [10,13], msg: 'El Numero de Cedula debe tener 10 digitos o el RUC 13 digitos' }
+      len: { args: [10, 13], msg: 'El Numero de Cedula debe tener 10 digitos o el RUC 13 digitos' }
     }
   }
 }

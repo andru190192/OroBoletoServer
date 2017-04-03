@@ -19,7 +19,7 @@ const FormaPagoSchema = {
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar un Numero de Cedula o RUC del cliente' },
       isNumeric: { args: true, msg: 'La Cedula o RUC del cliente debe tener solo numeros' },
-      len: { args: [10,13], msg: 'El Numero de Cedula debe tener 10 digitos o el RUC 13 digitos' },
+      len: { args: [10, 13], msg: 'El Numero de Cedula debe tener 10 digitos o el RUC 13 digitos' }
     }
   },
 
@@ -28,9 +28,9 @@ const FormaPagoSchema = {
     allowNull: false,
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar un Tipo para la Forma de Pago' },
-      is: { args: ['^[a-z ]+$','i'], msg: 'El Tipo para la Forma de Pago debe tener solo letras' }
+      is: { args: ['^[a-z ]+$', 'i'], msg: 'El Tipo para la Forma de Pago debe tener solo letras' }
     },
-    set: function(valTipo) { return this.setDataValue('tipo', valTipo.toUpperCase()) }
+    set: function (valTipo) { return this.setDataValue('tipo', valTipo.toUpperCase()) }
   },
 
   nombreTarjeta: {
@@ -40,9 +40,9 @@ const FormaPagoSchema = {
     defaultValue: null,
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar el Nombre de la Tarjeta de Credito' },
-      is: { args: ['^[a-z ]+$','i'], msg: 'El Nombre de la Tarjeta de Credito debe tener solo letras' }
+      is: { args: ['^[a-z ]+$', 'i'], msg: 'El Nombre de la Tarjeta de Credito debe tener solo letras' }
     },
-    set: function(valTarjeta) { return this.setDataValue('nombreTarjeta', valTarjeta.toUpperCase()) }
+    set: function (valTarjeta) { return this.setDataValue('nombreTarjeta', valTarjeta.toUpperCase()) }
   },
 
   numeroTarjeta: {
@@ -74,10 +74,10 @@ const FormaPagoSchema = {
     defaultValue: null,
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar la Fecha de Vencimiento para la Tarjeta de Credito' },
-      isDate: { args: true, msg: 'Debe ingresar un formato de fecha valido: YYYY-MM-DD'}
+      isDate: { args: true, msg: 'Debe ingresar un formato de fecha valido: YYYY-MM-DD' }
     },
-    get: function() {
-      return moment(this.getDataValue('fechaVencimiento'), 'EEE MMM dd yyyy HH:mm:ss (zzzz)').format('YYYY-MM-DD');
+    get: function () {
+      return moment(this.getDataValue('fechaVencimiento'), 'EEE MMM dd yyyy HH:mm:ss (zzzz)').format('YYYY-MM-DD')
     }
   },
 

@@ -3,20 +3,23 @@
   "version": "1.0.0",
   "description": "API RESTful OroTicketServer",
   "main": "index.js",
-  "scripts": {
-    "start": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "author": "OroCodigo Developers (www.orocodigo.com)",
+  "license": "MIT",
+  "homepage": "https://github.com/adrianconza/OroTicketServer#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/adrianconza/OroTicketServer.git"
   },
-  "author": "OroCodigo Developers (www.orocodigo.com)",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/adrianconza/OroTicketServer/issues"
   },
-  "homepage": "https://github.com/adrianconza/OroTicketServer#readme",
+  "scripts": {
+    "start": "standard && nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "standard": {
+    "parser": "babel-eslint"
+  },
   "dependencies": {
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
@@ -27,6 +30,8 @@
     "sequelize": "^3.30.2"
   },
   "devDependencies": {
-    "nodemon": "^1.11.0"
+    "babel-eslint": "^7.2.1",
+    "nodemon": "^1.11.0",
+    "standard": "^9.0.2"
   }
 }

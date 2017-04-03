@@ -1,7 +1,7 @@
 'use strict'
 
 const { Sequelize, sequelize } = require('./sequelizeConf')
-const moment = require('moment');
+const moment = require('moment')
 
 const RutaSchema = {
   cooperativa: {
@@ -10,7 +10,7 @@ const RutaSchema = {
     validate: {
       notEmpty: { args: true, msg: 'Debe seleccionar una cooperativa para asignar la ruta' }
     },
-    set: function(valCooperativa) { return this.setDataValue('cooperativa', valCooperativa.toUpperCase()) }
+    set: function (valCooperativa) { return this.setDataValue('cooperativa', valCooperativa.toUpperCase()) }
   },
 
   origen: {
@@ -19,9 +19,9 @@ const RutaSchema = {
     allowNull: false,
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar una ciudad de origen' },
-      is: { args: ['^[a-z ]+$','i'], msg: 'La ciudad de origen debe tener solo letras' }
+      is: { args: ['^[a-z ]+$', 'i'], msg: 'La ciudad de origen debe tener solo letras' }
     },
-    set: function(valOrigen) { return this.setDataValue('origen', valOrigen.toUpperCase()) }
+    set: function (valOrigen) { return this.setDataValue('origen', valOrigen.toUpperCase()) }
   },
 
   destino: {
@@ -30,9 +30,9 @@ const RutaSchema = {
     allowNull: false,
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar una ciudad de destino' },
-      is: { args: ['^[a-z ]+$','i'], msg: 'La ciudad de destino debe tener solo letras' }
+      is: { args: ['^[a-z ]+$', 'i'], msg: 'La ciudad de destino debe tener solo letras' }
     },
-    set: function(valDestino) { return this.setDataValue('destino', valDestino.toUpperCase()) }
+    set: function (valDestino) { return this.setDataValue('destino', valDestino.toUpperCase()) }
   },
 
   tiempoViaje: {
@@ -40,19 +40,20 @@ const RutaSchema = {
     field: 'tiempo_viaje',
     allowNull: true,
     defaultValue: null,
-    validate:{
+    validate: {
       notEmpty: { args: true, msg: 'Debe ingresar el tiempo estimado de viaje' },
-      isDate: { args: true, msg: 'Debe ingresar un formato de hora valida: hh:mm'}
+      isDate: { args: true, msg: 'Debe ingresar un formato de hora valida: hh:mm' }
     },
-    get: function() {
-      if(this.getDataValue('tiempoViaje') !== undefined && this.getDataValue('tiempoViaje') !== null)
+    get: function () {
+      if (this.getDataValue('tiempoViaje') !== undefined && this.getDataValue('tiempoViaje') !== null) {
         return moment(this.getDataValue('tiempoViaje'), 'EEE MMM dd yyyy HH:mm:ss (zzzz)').format('HH:mm')
-      else
+      } else {
         return '00:00'
+      }
     },
-    set: function(valTiempo){
-        let fecha = moment().format(`YYYY-MM-DDT${valTiempo}:00Z`)
-        return this.setDataValue('tiempoViaje', `${fecha}`)
+    set: function (valTiempo) {
+      let fecha = moment().format(`YYYY-MM-DDT${valTiempo}:00Z`)
+      return this.setDataValue('tiempoViaje', `${fecha}`)
     }
   },
 
@@ -60,15 +61,16 @@ const RutaSchema = {
     type: Sequelize.STRING,
     allowNull: true,
     defaultValue: null,
-    validate:{
+    validate: {
       notEmpty: { args: true, msg: 'Debe ingresar el numero de paradas que se haran durante la ruta' },
-      isNumeric: { args: true, msg: 'El numero de paradas no debe tener letras' },
+      isNumeric: { args: true, msg: 'El numero de paradas no debe tener letras' }
     },
-    get: function() {
-      if(this.getDataValue('paradas') !== undefined && this.getDataValue('paradas') !== null && this.getDataValue('paradas')>0)
+    get: function () {
+      if (this.getDataValue('paradas') !== undefined && this.getDataValue('paradas') !== null && this.getDataValue('paradas') > 0) {
         return this.getDataValue('paradas')
-      else
+      } else {
         return 'No se realizara ninguna parada durante la ruta'
+      }
     }
   },
 
@@ -77,7 +79,7 @@ const RutaSchema = {
     allowNull: false,
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar el precio del boleto' },
-      min: { args:1, msg: 'El Precio del Boleto debe ser mayor a cero' },
+      min: { args: 1, msg: 'El Precio del Boleto debe ser mayor a cero' },
       isDecimal: { args: true, msg: 'El Precio del Boleto debe tener solo numeros, ej: 10.00' }
     }
   }

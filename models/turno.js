@@ -12,7 +12,7 @@ const TurnoSchema = {
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar un Codigo para el Turno' }
     },
-    set: function(valCodigo) { return this.setDataValue('codigo', valCodigo.toUpperCase()) }
+    set: function (valCodigo) { return this.setDataValue('codigo', valCodigo.toUpperCase()) }
   },
 
   cooperativa: {
@@ -20,9 +20,9 @@ const TurnoSchema = {
     allowNull: false,
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar el Codigo de una Cooperativa para asignar el Turno' },
-      is: { args: ['^[a-z ]+$','i'], msg: 'El Codigo de la Cooperativa debe tener solo letras' }
+      is: { args: ['^[a-z ]+$', 'i'], msg: 'El Codigo de la Cooperativa debe tener solo letras' }
     },
-    set: function(valCooperativa) { return this.setDataValue('cooperativa', valCooperativa.toUpperCase()) }
+    set: function (valCooperativa) { return this.setDataValue('cooperativa', valCooperativa.toUpperCase()) }
   },
 
   origen: {
@@ -30,9 +30,9 @@ const TurnoSchema = {
     allowNull: false,
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar el nombre de la ciudad de origen' },
-      is: { args: ['^[a-z ]+$','i'], msg: 'El nombre de la ciudad de origen debe tener solo letras' }
+      is: { args: ['^[a-z ]+$', 'i'], msg: 'El nombre de la ciudad de origen debe tener solo letras' }
     },
-    set: function(valOrigen) { return this.setDataValue('origen', valOrigen.toUpperCase()) }
+    set: function (valOrigen) { return this.setDataValue('origen', valOrigen.toUpperCase()) }
   },
 
   destino: {
@@ -40,25 +40,25 @@ const TurnoSchema = {
     allowNull: false,
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar el nombre de la ciudad de destino' },
-      is: { args: ['^[a-z ]+$','i'], msg: 'El nombre de la ciudad de destino debe tener solo letras' }
+      is: { args: ['^[a-z ]+$', 'i'], msg: 'El nombre de la ciudad de destino debe tener solo letras' }
     },
-    set: function(valDestino) { return this.setDataValue('destino', valDestino.toUpperCase()) }
+    set: function (valDestino) { return this.setDataValue('destino', valDestino.toUpperCase()) }
   },
 
   horaSalida: {
     type: Sequelize.DATE,
     field: 'hora_salida',
     allowNull: false,
-    validate:{
+    validate: {
       notEmpty: { args: true, msg: 'Debe ingresar la hora de salida del turno' },
-      isDate: { args: true, msg: 'Debe ingresar un formato de hora de salida valido: hh:mm'},
+      isDate: { args: true, msg: 'Debe ingresar un formato de hora de salida valido: hh:mm' }
     },
-    get: function() {
-      return moment(this.getDataValue('horaSalida'), 'EEE MMM dd yyyy HH:mm:ss (zzzz)').format('HH:mm');
+    get: function () {
+      return moment(this.getDataValue('horaSalida'), 'EEE MMM dd yyyy HH:mm:ss (zzzz)').format('HH:mm')
     },
-    set: function(valSalida){
-        let hora = moment().format(`YYYY-MM-DDT${valSalida}:00Z`)
-        return this.setDataValue('horaSalida', `${hora}`)
+    set: function (valSalida) {
+      let hora = moment().format(`YYYY-MM-DDT${valSalida}:00Z`)
+      return this.setDataValue('horaSalida', `${hora}`)
     }
   },
 
@@ -66,18 +66,18 @@ const TurnoSchema = {
     type: Sequelize.DATE,
     field: 'hora_llegada',
     allowNull: false,
-    validate:{
+    validate: {
       notEmpty: { args: true, msg: 'Debe ingresar la hora de llegada del turno' },
-      isDate: { args: true, msg: 'Debe ingresar un formato de hora de llegada valido: hh:mm'},
+      isDate: { args: true, msg: 'Debe ingresar un formato de hora de llegada valido: hh:mm' }
     },
-    get: function() {
-      return moment(this.getDataValue('horaLlegada'), 'EEE MMM dd yyyy HH:mm:ss (zzzz)').format('HH:mm');
+    get: function () {
+      return moment(this.getDataValue('horaLlegada'), 'EEE MMM dd yyyy HH:mm:ss (zzzz)').format('HH:mm')
     },
-    set: function(valLlegada){
-        let hora = moment().format(`YYYY-MM-DDT${valLlegada}:00Z`)
-        return this.setDataValue('horaLlegada', `${hora}`)
+    set: function (valLlegada) {
+      let hora = moment().format(`YYYY-MM-DDT${valLlegada}:00Z`)
+      return this.setDataValue('horaLlegada', `${hora}`)
     }
-  },
+  }
 }
 
 module.exports = sequelize.define(

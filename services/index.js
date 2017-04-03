@@ -1,8 +1,8 @@
 'use strict'
 
 const jwt = require('jwt-simple')
-const moment = require('moment');
-const config = require('../config');
+const moment = require('moment')
+const config = require('../config')
 
 function createToken (persona) {
   const payload = {
@@ -14,7 +14,7 @@ function createToken (persona) {
 }
 
 function decodeToken (headers) {
-  const token = headers.authorization.split(" ")[1]
+  const token = headers.authorization.split(' ')[1]
   return jwt.decode(token, config.secretToken)
 }
 

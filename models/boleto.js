@@ -20,7 +20,7 @@ const BoletoSchema = {
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar el Numero de Cedula o RUC del Cliente' },
       isNumeric: { args: true, msg: 'El Numero de Cedula o RUC del Cliente debe tener solo numeros' },
-      len: { args: [10,13], msg: 'El Numero de Cedula debe tener 10 digitos o el RUC 13 digitos' }
+      len: { args: [10, 13], msg: 'El Numero de Cedula debe tener 10 digitos o el RUC 13 digitos' }
     }
   },
 
@@ -29,7 +29,7 @@ const BoletoSchema = {
     allowNull: false,
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar un Precio para el Boleto' },
-      min: { args:1, msg: 'El Precio del Boleto debe ser mayor a cero' },
+      min: { args: 1, msg: 'El Precio del Boleto debe ser mayor a cero' },
       isDecimal: { args: true, msg: 'El Precio del Boleto debe tener solo numeros, ej: 10.00' }
     }
   },

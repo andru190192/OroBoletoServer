@@ -7,8 +7,7 @@ const sequelize = new Sequelize(config.db,
     dialect: 'postgres',
     protocol: 'postgres',
     // logging: true,
-    timestamps: false,
-    timezone: '-05:00'
+    timestamps: false
   })
 
 function isUnique (modelName, field) {

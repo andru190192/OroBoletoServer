@@ -40,7 +40,7 @@ api.put('/turno/:turnoId', auth, turnoCtrl.updateTurno)
 api.delete('/turno/:turnoId', auth, turnoCtrl.deleteTurno)
 
 const formaPagoCtrl = require('../controllers/formaPago')
-api.get('/formasPago/:clienteId', auth, formaPagoCtrl.getFormasPagos)
+api.get('/formasPagos/:clienteId', auth, formaPagoCtrl.getFormasPagos)
 api.get('/formaPago/:formaPagoId', auth, formaPagoCtrl.getFormaPago)
 api.post('/formaPago', auth, formaPagoCtrl.saveFormaPago)
 api.put('/formaPago/:formaPagoId', auth, formaPagoCtrl.updateFormaPago)
@@ -59,5 +59,12 @@ api.get('/vehiculo/:vehiculoId', auth, vehiculoCtrl.getVehiculo)
 api.post('/vehiculo', auth, vehiculoCtrl.saveVehiculo)
 api.put('/vehiculo/:vehiculoId', auth, vehiculoCtrl.updateVehiculo)
 api.delete('/vehiculo/:vehiculoId', auth, vehiculoCtrl.deleteVehiculo)
+
+const turnoVehiculoCtrl = require('../controllers/turnoVehiculo')
+api.get('/turnosVehiculos/:placaId', auth, turnoVehiculoCtrl.getTurnosVehiculos)
+api.get('/turnoVehiculo/:turnoId/:placaId/:diaSalida', auth, turnoVehiculoCtrl.getTurnoVehiculo)
+api.post('/turnoVehiculo', auth, turnoVehiculoCtrl.saveTurnoVehiculo)
+api.put('/turnoVehiculo/:turnoId/:placaId/:diaSalida', auth, turnoVehiculoCtrl.updateTurnoVehiculo)
+api.delete('/turnoVehiculo/:turnoId/:placaId/:diaSalida', auth, turnoVehiculoCtrl.deleteTurnoVehiculo)
 
 module.exports = api

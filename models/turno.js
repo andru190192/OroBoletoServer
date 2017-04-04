@@ -19,7 +19,7 @@ const TurnoSchema = {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
-      notEmpty: { args: true, msg: 'Debe ingresar el Codigo de una Cooperativa para asignar el Turno' },
+      notEmpty: { args: true, msg: 'Debe seleccionar una Cooperativa para asignar el Turno' },
       is: { args: ['^[a-z ]+$', 'i'], msg: 'El Codigo de la Cooperativa debe tener solo letras' }
     },
     set: function (valCooperativa) { return this.setDataValue('cooperativa', valCooperativa.toUpperCase()) }
@@ -29,8 +29,8 @@ const TurnoSchema = {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
-      notEmpty: { args: true, msg: 'Debe ingresar el nombre de la ciudad de origen' },
-      is: { args: ['^[a-z ]+$', 'i'], msg: 'El nombre de la ciudad de origen debe tener solo letras' }
+      notEmpty: { args: true, msg: 'Debe seleccionar el Nombre de la Ciudad de Origen para el Turno' },
+      is: { args: ['^[a-z ]+$', 'i'], msg: 'El Nombre de la Ciudad de Origen para el Turno debe tener solo letras' }
     },
     set: function (valOrigen) { return this.setDataValue('origen', valOrigen.toUpperCase()) }
   },
@@ -39,8 +39,8 @@ const TurnoSchema = {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
-      notEmpty: { args: true, msg: 'Debe ingresar el nombre de la ciudad de destino' },
-      is: { args: ['^[a-z ]+$', 'i'], msg: 'El nombre de la ciudad de destino debe tener solo letras' }
+      notEmpty: { args: true, msg: 'Debe seleccionar el Nombre de la Ciudad de Destino para el Turno' },
+      is: { args: ['^[a-z ]+$', 'i'], msg: 'El Nombre de la Ciudad de Destino para el Turno debe tener solo letras' }
     },
     set: function (valDestino) { return this.setDataValue('destino', valDestino.toUpperCase()) }
   },
@@ -50,8 +50,8 @@ const TurnoSchema = {
     field: 'hora_salida',
     allowNull: false,
     validate: {
-      notEmpty: { args: true, msg: 'Debe ingresar la hora de salida del turno' },
-      isDate: { args: true, msg: 'Debe ingresar un formato de hora de salida valido: hh:mm' }
+      notEmpty: { args: true, msg: 'Debe ingresar la Hora de Salida para el Turno' },
+      isDate: { args: true, msg: 'Debe ingresar un formato de Hora de Salida valido: HH:mm' }
     },
     get: function () {
       return moment(this.getDataValue('horaSalida'), 'EEE MMM dd yyyy HH:mm:ss (zzzz)').format('HH:mm')
@@ -67,8 +67,8 @@ const TurnoSchema = {
     field: 'hora_llegada',
     allowNull: false,
     validate: {
-      notEmpty: { args: true, msg: 'Debe ingresar la hora de llegada del turno' },
-      isDate: { args: true, msg: 'Debe ingresar un formato de hora de llegada valido: hh:mm' }
+      notEmpty: { args: true, msg: 'Debe ingresar la Hora de Llegada para el Turno' },
+      isDate: { args: true, msg: 'Debe ingresar un formato de Hora de Llegada valido: HH:mm' }
     },
     get: function () {
       return moment(this.getDataValue('horaLlegada'), 'EEE MMM dd yyyy HH:mm:ss (zzzz)').format('HH:mm')

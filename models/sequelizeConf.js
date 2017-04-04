@@ -24,8 +24,19 @@ function isUnique (modelName, field) {
   }
 }
 
+function lenCedulaRuc (cedulaRuc) {
+  return (cedulaRuc, next) => {
+    console.log('La cedula o ruc es: ' + cedulaRuc)
+    if (parseInt(cedulaRuc.length) !== 10 && parseInt(cedulaRuc.length) !== 13) {
+      next('El Numero de Cedula debe tener 10 digitos o el RUC 13 digitos')
+    }
+    next()
+  }
+}
+
 module.exports = {
   Sequelize,
   sequelize,
-  isUnique
+  isUnique,
+  lenCedulaRuc
 }

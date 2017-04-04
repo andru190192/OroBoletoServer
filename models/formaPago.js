@@ -1,6 +1,6 @@
 'use strict'
 
-const { Sequelize, sequelize, isUnique } = require('./sequelizeConf')
+const { Sequelize, sequelize, isUnique, lenCedulaRuc } = require('./sequelizeConf')
 const moment = require('moment')
 
 const FormaPagoSchema = {
@@ -9,7 +9,8 @@ const FormaPagoSchema = {
     primaryKey: true,
     allowNull: false,
     validate: {
-      notEmpty: { args: true, msg: 'Debe ingresar un Codigo para la Forma de Pago' }
+      notEmpty: { args: true, msg: 'Debe ingresar un Codigo para la Forma de Pago' },
+      isNumeric: { args: true, msg: 'El Codigo para la Forma de Pago debe tener solo numeros' }
     }
   },
 
@@ -17,9 +18,9 @@ const FormaPagoSchema = {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
-      notEmpty: { args: true, msg: 'Debe ingresar un Numero de Cedula o RUC del cliente' },
-      isNumeric: { args: true, msg: 'La Cedula o RUC del cliente debe tener solo numeros' },
-      len: { args: [10, 13], msg: 'El Numero de Cedula debe tener 10 digitos o el RUC 13 digitos' }
+      notEmpty: { args: true, msg: 'Debe ingresar el Numero de Cedula o RUC para el Cliente' },
+      isNumeric: { args: true, msg: 'La Cedula o RUC del Cliente debe tener solo numeros' },
+      isLength: lenCedulaRuc(this.cliente)
     }
   },
 
@@ -53,6 +54,7 @@ const FormaPagoSchema = {
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar el Numero de la Tarjeta de Credito' },
       isNumeric: { args: true, msg: 'El Numero de la Tarjeta de Credito no debe tener letras' },
+      len: { args: [12, 16], msg: 'El Numero de la Tarjeta de Credito debe tener de 12 a 16 digitos' },
       isUnique: isUnique('formaPago', 'numero_tarjeta')
     }
   },
@@ -63,7 +65,9 @@ const FormaPagoSchema = {
     allowNull: true,
     defaultValue: null,
     validate: {
-      notEmpty: { args: true, msg: 'Debe ingresar el Codigo de Seguridad para la Tarjeta de Credito' }
+      notEmpty: { args: true, msg: 'Debe ingresar el Codigo de Seguridad de la Tarjeta de Credito' },
+      isNumeric: { args: true, msg: 'El Codigo de Seguridad de la Tarjeta de Credito no debe tener letras' },
+      len: { args: 3, msg: 'El Codigo de Seguridad de la Tarjeta de Credito debe tener 3 digitos' }
     }
   },
 
@@ -73,8 +77,9 @@ const FormaPagoSchema = {
     allowNull: true,
     defaultValue: null,
     validate: {
-      notEmpty: { args: true, msg: 'Debe ingresar la Fecha de Vencimiento para la Tarjeta de Credito' },
-      isDate: { args: true, msg: 'Debe ingresar un formato de fecha valido: YYYY-MM-DD' }
+      notEmpty: { args: true, msg: 'Debe ingresar la Fecha de Vencimiento de la Tarjeta de Credito' },
+      isDate: { args: true, msg: 'Debe ingresar un formato valido para la Fecha de Vencimiento de la Tarjeta de Credito: YYYY-MM-DD' },
+      isAfter: { args: moment().format('YYYY-MM-DD'), msg: 'La Fecha de Vencimiento de la Tarjeta de Credito debe ser posterior a la Fecha Actual' }
     },
     get: function () {
       return moment(this.getDataValue('fechaVencimiento'), 'EEE MMM dd yyyy HH:mm:ss (zzzz)').format('YYYY-MM-DD')

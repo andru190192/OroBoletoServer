@@ -1,6 +1,6 @@
 'use strict'
 
-const { Sequelize, sequelize, isUnique } = require('./sequelizeConf')
+const { Sequelize, sequelize, isUnique, lenCedulaRuc } = require('./sequelizeConf')
 
 const VehiculoSchema = {
   placa: {
@@ -29,8 +29,9 @@ const VehiculoSchema = {
     field: 'numero_asientos',
     allowNull: false,
     validate: {
-      notEmpty: { args: true, msg: 'Debe ingresar el Numero de Asientos que tiene el Vehiculo' },
-      isNumeric: { args: true, msg: 'El Numero de Asientos no debe tener letras' }
+      notEmpty: { args: true, msg: 'Debe ingresar el Numero de Asientos del Vehiculo' },
+      isNumeric: { args: true, msg: 'El Numero de Asientos del Vehiculo no debe tener letras' },
+      min: { args: 1, msg: 'El Numero de Asientos del Vehiculo debe ser mayor a cero' }
     }
   },
 
@@ -47,9 +48,9 @@ const VehiculoSchema = {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
-      notEmpty: { args: true, msg: 'Debe ingresar el Numero de Cedula o RUC para el Chofer del Vehiculo' },
+      notEmpty: { args: true, msg: 'Debe ingresar el Numero de Cedula o RUC del Chofer del Vehiculo' },
       isNumeric: { args: true, msg: 'El Numero de Cedula o RUC del Chofer no debe tener letras' },
-      len: { args: [10, 13], msg: 'El Numero de Cedula debe tener 10 digitos o el RUC 13 digitos' }
+      isLength: lenCedulaRuc(this.chofer)
     }
   }
 }

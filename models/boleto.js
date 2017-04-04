@@ -1,6 +1,6 @@
 'use strict'
 
-const { Sequelize, sequelize, isUnique } = require('./sequelizeConf')
+const { Sequelize, sequelize, isUnique, lenCedulaRuc } = require('./sequelizeConf')
 
 const BoletoSchema = {
   numeroFactura: {
@@ -9,7 +9,8 @@ const BoletoSchema = {
     field: 'numero_factura',
     allowNull: false,
     validate: {
-      notEmpty: { args: true, msg: 'Debe ingresar un Numero de Factura' },
+      notEmpty: { args: true, msg: 'Debe ingresar el Numero de Factura para el Boleto' },
+      len: { args: 17, msg: 'El Numero de la Factura debe tener 17 caracteres, ej: 001-001-000000001' },
       isUnique: isUnique('boleto', 'numero_factura')
     }
   },
@@ -20,7 +21,7 @@ const BoletoSchema = {
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar el Numero de Cedula o RUC del Cliente' },
       isNumeric: { args: true, msg: 'El Numero de Cedula o RUC del Cliente debe tener solo numeros' },
-      len: { args: [10, 13], msg: 'El Numero de Cedula debe tener 10 digitos o el RUC 13 digitos' }
+      isLength: lenCedulaRuc(this.cliente)
     }
   },
 
@@ -39,7 +40,8 @@ const BoletoSchema = {
     field: 'forma_pago',
     allowNull: false,
     validate: {
-      notEmpty: { args: true, msg: 'Debe ingresar el Codigo de la Forma de Pago para el Boleto' }
+      notEmpty: { args: true, msg: 'Debe ingresar el Codigo de la Forma de Pago para el Boleto' },
+      isNumeric: { args: true, msg: 'El Codigo para la Forma de Pago del Boleto debe tener solo numeros' }
     }
   }
 }

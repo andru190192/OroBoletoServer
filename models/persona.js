@@ -1,6 +1,6 @@
 'use strict'
 
-const { Sequelize, sequelize, isUnique } = require('./sequelizeConf')
+const { Sequelize, sequelize, isUnique, lenCedulaRuc } = require('./sequelizeConf')
 
 const PersonaSchema = {
   cedulaRuc: {
@@ -9,9 +9,9 @@ const PersonaSchema = {
     field: 'cedula_ruc',
     allowNull: false,
     validate: {
-      notEmpty: { args: true, msg: 'Debe ingresar un numero de Cedula o RUC' },
-      isNumeric: { args: true, msg: 'La cedula o RUC debe tener solo numeros' },
-      len: { args: [10, 13], msg: 'El numero de cedula debe tener 10 digitos o el RUC 13 digitos' },
+      notEmpty: { args: true, msg: 'Debe ingresar un Numero de Cedula o RUC' },
+      isNumeric: { args: true, msg: 'El Numero de Cedula o RUC no debe tener letras' },
+      isLength: lenCedulaRuc(this.cedulaRuc),
       isUnique: isUnique('persona', 'cedula_ruc')
     }
   },
@@ -20,7 +20,7 @@ const PersonaSchema = {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
-      notEmpty: { args: true, msg: 'Debe ingresar un nombre de usuario' },
+      notEmpty: { args: true, msg: 'Debe ingresar un Nombre de Usuario' },
       isUnique: isUnique('persona', 'usuario')
     },
     set: function (valUsuario) { return this.setDataValue('usuario', valUsuario.toLowerCase()) }
@@ -30,8 +30,8 @@ const PersonaSchema = {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
-      notEmpty: { args: true, msg: 'Debe ingresar su nombre' },
-      is: { args: ['^[a-z ]+$', 'i'], msg: 'Su nombre debe tener solo letras' }
+      notEmpty: { args: true, msg: 'Debe ingresar su Nombre' },
+      is: { args: ['^[a-z ]+$', 'i'], msg: 'Su Nombre debe tener solo letras' }
     },
     set: function (valNombre) { return this.setDataValue('nombre', valNombre.toUpperCase()) }
   },
@@ -40,8 +40,8 @@ const PersonaSchema = {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
-      notEmpty: { args: true, msg: 'Debe ingresar su apellido' },
-      is: { args: ['^[a-z ]+$', 'i'], msg: 'Su apellido debe tener solo letras' }
+      notEmpty: { args: true, msg: 'Debe ingresar su Apellido' },
+      is: { args: ['^[a-z ]+$', 'i'], msg: 'Su Apellido debe tener solo letras' }
     },
     set: function (valApellido) { return this.setDataValue('apellido', valApellido.toUpperCase()) }
   },
@@ -51,7 +51,7 @@ const PersonaSchema = {
     allowNull: true,
     defaultValue: null,
     validate: {
-      notEmpty: { args: true, msg: 'Debe ingresar su direccion' }
+      notEmpty: { args: true, msg: 'Debe ingresar su Direccion' }
     },
     set: function (valDireccion) { return this.setDataValue('direccion', valDireccion.toUpperCase()) }
   },
@@ -60,8 +60,8 @@ const PersonaSchema = {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
-      notEmpty: { args: true, msg: 'Debe ingresar su correo electronico' },
-      isEmail: { args: true, msg: 'El correo electronico ingresado no es valido' },
+      notEmpty: { args: true, msg: 'Debe ingresar su Correo Electronico' },
+      isEmail: { args: true, msg: 'El Correo Electronico ingresado no es valido' },
       isUnique: isUnique('persona', 'email')
     },
     set: function (valEmail) { return this.setDataValue('email', valEmail.toLowerCase()) }
@@ -71,8 +71,9 @@ const PersonaSchema = {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
-      notEmpty: { args: true, msg: 'Debe ingresar un numero de telefono' },
-      isNumeric: { args: true, msg: 'El numero de telefono debe tener solo numeros' }
+      notEmpty: { args: true, msg: 'Debe ingresar un Numero de Telefono' },
+      isNumeric: { args: true, msg: 'El Numero de Telefono no debe tener letras' },
+      len: { args: [9, 10], msg: 'El Numero de Telefono debe tener de 9 a 10 caracteres' }
     }
   },
 
@@ -81,8 +82,8 @@ const PersonaSchema = {
     allowNull: true,
     defaultValue: null,
     validate: {
-      notEmpty: { args: true, msg: 'Debe ingresar el nombre de su ciudad' },
-      is: { args: ['^[a-z ]+$', 'i'], msg: 'El nombre de la ciudad debe tener solo letras' }
+      notEmpty: { args: true, msg: 'Debe ingresar el Nombre de su Ciudad' },
+      is: { args: ['^[a-z ]+$', 'i'], msg: 'El Nombre de la Ciudad debe tener solo letras' }
     },
     set: function (valCiudad) { return this.setDataValue('ciudad', valCiudad.toUpperCase()) }
   }

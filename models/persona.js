@@ -11,8 +11,7 @@ const PersonaSchema = {
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar un Numero de Cedula o RUC' },
       isNumeric: { args: true, msg: 'El Numero de Cedula o RUC no debe tener letras' },
-      isLength: lenCedulaRuc(this.cedulaRuc),
-      isUnique: isUnique('persona', 'cedula_ruc')
+      isLength: lenCedulaRuc(this.cedulaRuc)
     }
   },
 
@@ -61,8 +60,7 @@ const PersonaSchema = {
     allowNull: false,
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar su Correo Electronico' },
-      isEmail: { args: true, msg: 'El Correo Electronico ingresado no es valido' },
-      isUnique: isUnique('persona', 'email')
+      isEmail: { args: true, msg: 'El Correo Electronico ingresado no es valido' }
     },
     set: function (valEmail) { return this.setDataValue('email', valEmail.toLowerCase()) }
   },

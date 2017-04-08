@@ -38,7 +38,8 @@ function updatePersona (req, res) {
     if (personaUpdate[0] <= 0) return res.status(404).send({ message: `La persona con el numero de identificacion '${personaId}' no existe` })
     res.status(200).send({ persona: personaUpdate[1] })
   })
-  .catch(err => res.status(500).send({ message: `Error al actualizar la informacion de la persona en la base de datos: ${err}` }))
+  .catch(err => res.status(500).send({ message: `Error al actualizar la informacion de la persona en la base de datos: ${err}` })
+  )
 }
 
 function deletePersona (req, res) {

@@ -85,7 +85,7 @@ CREATE SCHEMA oroticket AUTHORIZATION orocodigo;
 CREATE DOMAIN oroticket.asiento 									AS character varying(2);
 CREATE DOMAIN oroticket.cedula_ruc 								AS character varying(13);
 CREATE DOMAIN oroticket.codigo 										AS character varying(5);
-CREATE DOMAIN oroticket.codigo_seguridad_tarjeta 	AS character varying(3);
+CREATE DOMAIN oroticket.codigo_seguridad_tarjeta 	AS character varying(4);
 CREATE DOMAIN oroticket.dinero 										AS numeric(9,2);
 CREATE DOMAIN oroticket.direccion 								AS character varying(300);
 CREATE DOMAIN oroticket.email 										AS character varying(50);

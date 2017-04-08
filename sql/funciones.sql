@@ -28,6 +28,7 @@ ALTER TYPE oroticket.tipo_turno OWNER TO orocodigo;
 -- DROP FUNCTION oroticket.fun_ciudad_origen();
 -- DROP FUNCTION oroticket.fun_ciudad_destino(text);
 -- DROP FUNCTION oroticket.fun_turno(text, text, date);
+-- DROP FUNCTION oroticket.fun_forma_pago(text, integer);
 
 CREATE OR REPLACE FUNCTION oroticket.fun_ciudad_origen()
   RETURNS SETOF oroticket.tipo_ciudad_origen_destino AS
@@ -119,6 +120,38 @@ ALTER FUNCTION oroticket.fun_turno(text, text, date) OWNER TO orocodigo;
 -- SELECT * FROM oroticket.fun_turno('MACHALA', 'GUAYAQUIL', '2017-03-29')
 
 
+CREATE OR REPLACE FUNCTION oroticket.fun_forma_pago(text, integer)
+  RETURNS SETOF oroticket.forma_pago AS
+$BODY$
+DECLARE
+  p_cliente     ALIAS FOR $1;
+  p_forma_pago  ALIAS FOR $2;
+
+  cursor_forma_pago oroticket.forma_pago%ROWTYPE;
+  sql text;
+BEGIN
+  sql := $$SELECT id, cliente, tipo, nombre_tarjeta,
+  SUBSTRING(numero_tarjeta FROM 1 FOR 4)||'XXXXXXXX'||SUBSTRING(numero_tarjeta FROM 13 FOR 16) as numero_tarjeta,
+  'XXX' as codigo_seguridad, fecha_vencimiento, activo
+  FROM oroticket.forma_pago WHERE$$ ||
+  CASE WHEN p_cliente IS NOT NULL THEN $$ cliente = '$$ || p_cliente ||$$'$$ ELSE ' id = ' || p_forma_pago  END || $$;$$;
+  RAISE NOTICE '%',sql;
+
+  FOR cursor_forma_pago IN EXECUTE sql
+  LOOP
+      RETURN NEXT cursor_forma_pago;
+  END LOOP;
+  RETURN;
+END;
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100
+  ROWS 1000;
+ALTER FUNCTION oroticket.fun_forma_pago(text, integer) OWNER TO orocodigo;
+
+-- SELECT * FROM oroticket.fun_forma_pago(null, 1)
+
+
 --TRIGGERS--
 
 DROP TRIGGER IF EXISTS tri_turno_llenar_codigo_hora_llegada ON oroticket.turno;
@@ -181,6 +214,7 @@ CREATE TRIGGER tri_ruta_actualizar_hora_llegada_turno
 
 ALTER TABLE oroticket.boleto DROP CONSTRAINT chk_validar_forma_pago;
 ALTER TABLE oroticket.turno_vehiculo DROP CONSTRAINT uni_turno_placa_dia_salida;
+ALTER TABLE oroticket.forma_pago DROP CONSTRAINT uni_cliente_numero_tarjeta;
 
 -- DROP FUNCTION oroticket.chk_validar_forma_pago(integer, text);
 
@@ -207,3 +241,4 @@ ALTER TABLE oroticket.boleto ADD CONSTRAINT chk_validar_forma_pago
 
 
 ALTER TABLE oroticket.turno_vehiculo ADD CONSTRAINT uni_turno_placa_dia_salida UNIQUE (turno, placa, dia_salida);
+ALTER TABLE oroticket.forma_pago ADD CONSTRAINT uni_cliente_numero_tarjeta UNIQUE (cliente, numero_tarjeta);

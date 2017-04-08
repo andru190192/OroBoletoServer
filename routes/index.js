@@ -44,7 +44,6 @@ api.get('/formasPagos/:clienteId', auth, formaPagoCtrl.getFormasPagos)
 api.get('/formaPago/:formaPagoId', auth, formaPagoCtrl.getFormaPago)
 api.post('/formaPago', auth, formaPagoCtrl.saveFormaPago)
 api.put('/formaPago/:formaPagoId', auth, formaPagoCtrl.updateFormaPago)
-api.delete('/formaPago/:formaPagoId', auth, formaPagoCtrl.deleteFormaPago)
 
 const boletoCtrl = require('../controllers/boleto')
 api.get('/boletos/:clienteId', auth, boletoCtrl.getBoletos)

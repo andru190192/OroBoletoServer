@@ -2,7 +2,7 @@
 
 ALTER TABLE oroticket.boleto 					DROP CONSTRAINT boleto_cliente_pfk;
 ALTER TABLE oroticket.boleto 					DROP CONSTRAINT boleto_forma_pago_fk;
-ALTER TABLE oroticket.detalle_boleto 	DROP CONSTRAINT detalle_boleto_turno_placa_pfk;
+ALTER TABLE oroticket.detalle_boleto 	DROP CONSTRAINT detalle_boleto_turno_vehiculo_pfk;
 ALTER TABLE oroticket.detalle_boleto 	DROP CONSTRAINT detalle_boleto_numero_factura_cliente_pfk;
 ALTER TABLE oroticket.forma_pago 			DROP CONSTRAINT forma_pago_cliente_fk;
 ALTER TABLE oroticket.rol_usuario 		DROP CONSTRAINT rol_usuario_rol_pfk;
@@ -16,14 +16,14 @@ ALTER TABLE oroticket.vehiculo 				DROP CONSTRAINT vehiculo_chofer_pfk;
 ALTER TABLE oroticket.bitacora 				DROP CONSTRAINT bitacora_id_pk;
 ALTER TABLE oroticket.boleto 					DROP CONSTRAINT boleto_numero_factura_cliente_pk;
 ALTER TABLE oroticket.cooperativa 		DROP CONSTRAINT cooperativa_codigo_pk;
-ALTER TABLE oroticket.detalle_boleto 	DROP CONSTRAINT detalle_boleto_numero_factura_cliente_turno_placa_numero_asiento_pk;
+ALTER TABLE oroticket.detalle_boleto 	DROP CONSTRAINT detalle_boleto_num_fac_cli_turno_vehi_num_asien_pk;
 ALTER TABLE oroticket.forma_pago 			DROP CONSTRAINT forma_pago_id_pk;
 ALTER TABLE oroticket.persona 				DROP CONSTRAINT persona_cedula_ruc_pk;
 ALTER TABLE oroticket.roles 					DROP CONSTRAINT roles_rol_pk;
 ALTER TABLE oroticket.rol_usuario 		DROP CONSTRAINT rol_usuario_rol_usuario_pk;
 ALTER TABLE oroticket.ruta 						DROP CONSTRAINT ruta_cooperativa_origen_destino_pk;
 ALTER TABLE oroticket.turno 					DROP CONSTRAINT turno_codigo_pk;
-ALTER TABLE oroticket.turno_vehiculo 	DROP CONSTRAINT turno_vehiculo_turno_placa_dia_salida_pk;
+ALTER TABLE oroticket.turno_vehiculo 	DROP CONSTRAINT turno_vehiculo_id_pk;
 ALTER TABLE oroticket.vehiculo 				DROP CONSTRAINT vehiculo_placa_pk;
 
 DROP TABLE oroticket.bitacora;
@@ -164,7 +164,8 @@ CREATE TABLE oroticket.vehiculo(
 );
 
 CREATE TABLE oroticket.turno_vehiculo(
-	turno 		 oroticket.codigo 	NOT NULL,
+	id		 			Serial					  NOT NULL,
+	turno 		  oroticket.codigo 	NOT NULL,
 	placa 	  	oroticket.placa 	NOT NULL,
 	dia_salida 	oroticket.fecha 	NOT NULL
 );
@@ -172,9 +173,7 @@ CREATE TABLE oroticket.turno_vehiculo(
 CREATE TABLE oroticket.detalle_boleto(
 	numero_factura 	oroticket.numero_factura 	NOT NULL,
 	cliente 	    	oroticket.cedula_ruc   		NOT NULL,
-	turno 			    oroticket.codigo 			    NOT NULL,
-	placa 			    oroticket.placa 			    NOT NULL,
-	dia_salida 			oroticket.fecha 					NOT NULL,
+	turno_vehiculo 	Integer 							    NOT NULL,
 	numero_asiento 	oroticket.asiento 			  NOT NULL,
 	valor 			    oroticket.dinero 			    NOT NULL
 );
@@ -228,20 +227,20 @@ CREATE TABLE oroticket.bitacora(
 ALTER TABLE oroticket.bitacora 	    	ADD CONSTRAINT bitacora_id_pk 										                  PRIMARY KEY (id);
 ALTER TABLE oroticket.boleto 			    ADD CONSTRAINT boleto_numero_factura_cliente_pk 					          PRIMARY KEY (numero_factura, cliente);
 ALTER TABLE oroticket.cooperativa 		ADD CONSTRAINT cooperativa_codigo_pk 								                PRIMARY KEY (codigo);
-ALTER TABLE oroticket.detalle_boleto 	ADD CONSTRAINT detalle_boleto_num_fac_cli_turno_placa_num_asien_pk 	PRIMARY KEY (numero_factura, cliente, turno, placa, numero_asiento);
+ALTER TABLE oroticket.detalle_boleto 	ADD CONSTRAINT detalle_boleto_num_fac_cli_turno_vehi_num_asien_pk 	PRIMARY KEY (numero_factura, cliente, turno_vehiculo, numero_asiento);
 ALTER TABLE oroticket.forma_pago 		  ADD CONSTRAINT forma_pago_id_pk 									                  PRIMARY KEY (id);
 ALTER TABLE oroticket.persona 			  ADD CONSTRAINT persona_cedula_ruc_pk 								                PRIMARY KEY (cedula_ruc);
 ALTER TABLE oroticket.roles 			    ADD CONSTRAINT roles_rol_pk 										                    PRIMARY KEY (rol);
 ALTER TABLE oroticket.rol_usuario 		ADD CONSTRAINT rol_usuario_rol_usuario_pk 							            PRIMARY KEY (rol, usuario);
 ALTER TABLE oroticket.ruta 			      ADD CONSTRAINT ruta_cooperativa_origen_destino_pk 					        PRIMARY KEY (cooperativa, origen, destino);
 ALTER TABLE oroticket.turno 			    ADD CONSTRAINT turno_codigo_pk 										                  PRIMARY KEY (codigo);
-ALTER TABLE oroticket.turno_vehiculo 	ADD CONSTRAINT turno_vehiculo_turno_dia_salida_fk 						      PRIMARY KEY (turno, placa, dia_salida);
+ALTER TABLE oroticket.turno_vehiculo 	ADD CONSTRAINT turno_vehiculo_id_pk 											      		PRIMARY KEY (id);
 ALTER TABLE oroticket.vehiculo 		    ADD CONSTRAINT vehiculo_placa_pk 									                  PRIMARY KEY (placa);
 
 
 ALTER TABLE oroticket.boleto 			    ADD CONSTRAINT boleto_cliente_pfk 							          FOREIGN KEY (cliente) 						          REFERENCES oroticket.persona (cedula_ruc) 					    			  MATCH FULL  ON UPDATE CASCADE  ON DELETE NO ACTION;
 ALTER TABLE oroticket.boleto 			    ADD CONSTRAINT boleto_forma_pago_fk 						          FOREIGN KEY (forma_pago) 					          REFERENCES oroticket.forma_pago (id) 						        			  MATCH FULL  ON UPDATE CASCADE  ON DELETE NO ACTION;
-ALTER TABLE oroticket.detalle_boleto 	ADD CONSTRAINT detalle_boleto_turno_placa_dia_salida_pfk 	FOREIGN KEY (turno, placa, dia_salida) 			REFERENCES oroticket.turno_vehiculo (turno, placa,dia_salida)   MATCH FULL  ON UPDATE CASCADE  ON DELETE NO ACTION;
+ALTER TABLE oroticket.detalle_boleto 	ADD CONSTRAINT detalle_boleto_turno_vehiculo_pfk 					FOREIGN KEY (turno_vehiculo) 								REFERENCES oroticket.turno_vehiculo (id) 									 			MATCH FULL  ON UPDATE CASCADE  ON DELETE NO ACTION;
 ALTER TABLE oroticket.detalle_boleto 	ADD CONSTRAINT detalle_boleto_numero_factura_cliente_pfk 	FOREIGN KEY (numero_factura, cliente) 		  REFERENCES oroticket.boleto (numero_factura, cliente)     			MATCH FULL  ON UPDATE CASCADE  ON DELETE NO ACTION;
 ALTER TABLE oroticket.forma_pago 		  ADD CONSTRAINT forma_pago_cliente_fk          						FOREIGN KEY (cliente) 						          REFERENCES oroticket.persona (cedula_ruc) 					      			MATCH FULL  ON UPDATE CASCADE  ON DELETE NO ACTION;
 ALTER TABLE oroticket.rol_usuario 		ADD CONSTRAINT rol_usuario_rol_pfk 						           	FOREIGN KEY (rol) 							            REFERENCES oroticket.roles (rol) 							            			MATCH FULL  ON UPDATE CASCADE  ON DELETE NO ACTION;
@@ -251,7 +250,6 @@ ALTER TABLE oroticket.turno 			    ADD CONSTRAINT turno_cooperativa_origen_desti
 ALTER TABLE oroticket.turno_vehiculo 	ADD CONSTRAINT turno_vehiculo_placa_pfk 					        FOREIGN KEY (placa) 						            REFERENCES oroticket.vehiculo (placa) 						        			MATCH FULL  ON UPDATE CASCADE  ON DELETE NO ACTION;
 ALTER TABLE oroticket.turno_vehiculo 	ADD CONSTRAINT turno_vehiculo_turno_pfk 					        FOREIGN KEY (turno) 						            REFERENCES oroticket.turno (codigo) 						          			MATCH FULL  ON UPDATE CASCADE  ON DELETE NO ACTION;
 ALTER TABLE oroticket.vehiculo 		    ADD CONSTRAINT vehiculo_chofer_pfk 							          FOREIGN KEY (chofer) 						            REFERENCES oroticket.persona (cedula_ruc) 					      			MATCH FULL  ON UPDATE CASCADE  ON DELETE NO ACTION;
-
 
 ALTER TABLE oroticket.bitacora 		    OWNER TO orocodigo;
 ALTER TABLE oroticket.boleto 			    OWNER TO orocodigo;

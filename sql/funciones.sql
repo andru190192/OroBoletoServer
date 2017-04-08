@@ -10,15 +10,14 @@ CREATE TYPE oroticket.tipo_ciudad_origen_destino AS
   (nombre oroticket.nombre);
 
 CREATE TYPE oroticket.tipo_turno AS
-  (coodigo      oroticket.codigo,
+  (codigo       oroticket.codigo,
    cooperativa  oroticket.nombre,
-   origen       oroticket.nombre,
-   destino      oroticket.nombre,
    hora_salida  oroticket.hora,
    hora_llegada oroticket.hora,
    tiempo_viaje oroticket.hora,
    paradas      oroticket.nombre,
-   valor        oroticket.dinero);
+   valor        oroticket.dinero,
+   asientos     oroticket.asiento);
 
 ALTER TYPE oroticket.tipo_ciudad_origen_destino OWNER TO orocodigo;
 ALTER TYPE oroticket.tipo_turno OWNER TO orocodigo;
@@ -87,11 +86,11 @@ DECLARE
   cursor_turno oroticket.tipo_turno%ROWTYPE;
   sql text;
 BEGIN
-  sql := $$SELECT t.codigo, c.nombre, t.origen, t.destino,
-  LPAD(EXTRACT(hour FROM t.hora_salida)::text, 2, '0') || ':' || LPAD(EXTRACT(minute FROM t.hora_salida)::text, 2, '0') as hora_salida,
-  LPAD(EXTRACT(hour FROM t.hora_llegada)::text, 2, '0') || ':' || LPAD(EXTRACT(minute FROM t.hora_llegada)::text, 2, '0') as hora_llegada,
-  LPAD(EXTRACT(hour FROM r.tiempo_viaje)::text, 2, '0') || ':' || LPAD(EXTRACT(minute FROM r.tiempo_viaje)::text, 2, '0') as tiempo_viaje,
-  paradas, valor
+  sql := $$SELECT t.codigo, c.nombre,
+  LPAD(EXTRACT(hour FROM t.hora_salida)::text, 2, '0') || ':' || LPAD(EXTRACT(minute FROM t.hora_salida)::text, 2, '0') AS hora_salida,
+  LPAD(EXTRACT(hour FROM t.hora_llegada)::text, 2, '0') || ':' || LPAD(EXTRACT(minute FROM t.hora_llegada)::text, 2, '0') AS hora_llegada,
+  LPAD(EXTRACT(hour FROM r.tiempo_viaje)::text, 2, '0') || ':' || LPAD(EXTRACT(minute FROM r.tiempo_viaje)::text, 2, '0') AS tiempo_viaje,
+  paradas, valor, '0'
   FROM oroticket.turno t
   INNER JOIN oroticket.ruta r on (t.cooperativa = r.cooperativa and t.origen = r.origen and t.destino = r.destino)
   INNER JOIN oroticket.cooperativa c on (c.codigo = t.cooperativa)
@@ -102,6 +101,11 @@ BEGIN
 
   FOR cursor_turno IN EXECUTE sql
   LOOP
+      cursor_turno.asientos := CAST(v.numero_asientos AS integer) - (SELECT COUNT(db.turno_vehiculo) FROM oroticket.detalle_boleto db WHERE db.turno_vehiculo = tv.id)
+                                FROM oroticket.turno_vehiculo tv
+                                INNER JOIN oroticket.vehiculo v ON (v.placa =  tv.placa)
+                                WHERE tv.turno = cursor_turno.codigo and tv.dia_salida = p_fecha;
+      cursor_turno.asientos := COALESCE(cursor_turno.asientos, '0');
       RETURN NEXT cursor_turno;
   END LOOP;
   RETURN;
@@ -132,7 +136,7 @@ DECLARE
 BEGIN
   IF TG_OP='INSERT' THEN
     secuencia := COUNT(codigo) + 1 FROM oroticket.turno WHERE cooperativa = NEW.cooperativa AND origen = NEW.origen AND destino = NEW.destino;
-    NEW.codigo := SUBSTRING(NEW.cooperativa FROM 1 FOR 1) ||
+    NEW.codigo := SUBSTRING(NEW.cooperativa FROM 1 FOR 2) ||
                   SUBSTRING(NEW.origen FROM 1 FOR 1) ||
                   SUBSTRING(NEW.destino FROM 1 FOR 1) ||
                   secuencia;
@@ -173,9 +177,10 @@ CREATE TRIGGER tri_ruta_actualizar_hora_llegada_turno
   EXECUTE PROCEDURE oroticket.tri_ruta_actualizar_hora_llegada_turno();
 
 
---CHECK CONSTRAINT--
+--CHECK - UNIQUE CONSTRAINT--
 
 ALTER TABLE oroticket.boleto DROP CONSTRAINT chk_validar_forma_pago;
+ALTER TABLE oroticket.turno_vehiculo DROP CONSTRAINT uni_turno_placa_dia_salida;
 
 -- DROP FUNCTION oroticket.chk_validar_forma_pago(integer, text);
 
@@ -199,3 +204,6 @@ $BODY$
   COST 100;
 ALTER TABLE oroticket.boleto ADD CONSTRAINT chk_validar_forma_pago
   CHECK (oroticket.chk_validar_forma_pago(forma_pago, cliente));
+
+
+ALTER TABLE oroticket.turno_vehiculo ADD CONSTRAINT uni_turno_placa_dia_salida UNIQUE (turno, placa, dia_salida);

@@ -1,6 +1,6 @@
 'use strict'
 
-const { Sequelize, sequelize, isUnique, lenCedulaRuc } = require('./sequelizeConf')
+const { Sequelize, sequelize, lenCedulaRuc } = require('./sequelizeConf')
 const moment = require('moment')
 
 const FormaPagoSchema = {
@@ -31,7 +31,7 @@ const FormaPagoSchema = {
       notEmpty: { args: true, msg: 'Debe ingresar un Tipo para la Forma de Pago' },
       is: { args: ['^[a-z ]+$', 'i'], msg: 'El Tipo para la Forma de Pago debe tener solo letras' }
     },
-    set: function (valTipo) { return this.setDataValue('tipo', valTipo.toUpperCase()) }
+    set: function (valTipo) { return this.setDataValue('tipo', 'TC') }
   },
 
   nombreTarjeta: {
@@ -54,8 +54,8 @@ const FormaPagoSchema = {
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar el Numero de la Tarjeta de Credito' },
       isNumeric: { args: true, msg: 'El Numero de la Tarjeta de Credito no debe tener letras' },
-      len: { args: [12, 16], msg: 'El Numero de la Tarjeta de Credito debe tener de 12 a 16 digitos' },
-      isUnique: isUnique('formaPago', 'numero_tarjeta')
+      len: { args: [15, 16], msg: 'El Numero de la Tarjeta de Credito debe tener 16 digitos' }
+      // isUnique: isUnique('formaPago', 'numero_tarjeta')
     }
   },
 
@@ -67,7 +67,7 @@ const FormaPagoSchema = {
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar el Codigo de Seguridad de la Tarjeta de Credito' },
       isNumeric: { args: true, msg: 'El Codigo de Seguridad de la Tarjeta de Credito no debe tener letras' },
-      len: { args: 3, msg: 'El Codigo de Seguridad de la Tarjeta de Credito debe tener 3 digitos' }
+      len: { args: [3, 4], msg: 'El Codigo de Seguridad de la Tarjeta de Credito debe tener 3 digitos' }
     }
   },
 
@@ -80,9 +80,11 @@ const FormaPagoSchema = {
       notEmpty: { args: true, msg: 'Debe ingresar la Fecha de Vencimiento de la Tarjeta de Credito' },
       isDate: { args: true, msg: 'Debe ingresar un formato valido para la Fecha de Vencimiento de la Tarjeta de Credito: YYYY-MM-DD' },
       isAfter: { args: moment().format('YYYY-MM-DD'), msg: 'La Fecha de Vencimiento de la Tarjeta de Credito debe ser posterior a la Fecha Actual' }
+      // La fecha de Vencimiento debe ser superior a la fecha actual.
+      // Si se presentan problemas por tarjetas vencidas, aumentar n dias a la fecha actual.
     },
     get: function () {
-      return moment(this.getDataValue('fechaVencimiento'), 'EEE MMM dd yyyy HH:mm:ss (zzzz)').format('YYYY-MM-DD')
+      return moment(this.getDataValue('fechaVencimiento')).format('YYYY-MM-DD')
     }
   },
 

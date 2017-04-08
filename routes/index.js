@@ -60,10 +60,10 @@ api.put('/vehiculo/:vehiculoId', auth, vehiculoCtrl.updateVehiculo)
 api.delete('/vehiculo/:vehiculoId', auth, vehiculoCtrl.deleteVehiculo)
 
 const turnoVehiculoCtrl = require('../controllers/turnoVehiculo')
-api.get('/turnosVehiculos/:placaId', auth, turnoVehiculoCtrl.getTurnosVehiculos)
-api.get('/turnoVehiculo/:turnoId/:placaId/:diaSalida', auth, turnoVehiculoCtrl.getTurnoVehiculo)
+api.get('/turnosVehiculos/:turnoId', auth, turnoVehiculoCtrl.getTurnosVehiculos)
+api.get('/turnoVehiculo/:turnoVehiculoId', auth, turnoVehiculoCtrl.getTurnoVehiculo)
 api.post('/turnoVehiculo', auth, turnoVehiculoCtrl.saveTurnoVehiculo)
-api.put('/turnoVehiculo/:turnoId/:placaId/:diaSalida', auth, turnoVehiculoCtrl.updateTurnoVehiculo)
-api.delete('/turnoVehiculo/:turnoId/:placaId/:diaSalida', auth, turnoVehiculoCtrl.deleteTurnoVehiculo)
+api.put('/turnoVehiculo/:turnoVehiculoId', auth, turnoVehiculoCtrl.updateTurnoVehiculo)
+api.delete('/turnoVehiculo/:turnoVehiculoId', auth, turnoVehiculoCtrl.deleteTurnoVehiculo)
 
 module.exports = api

@@ -4,9 +4,18 @@ const { Sequelize, sequelize } = require('./sequelizeConf')
 const moment = require('moment')
 
 const TurnoVehiculoSchema = {
+  id: {
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    allowNull: false,
+    validate: {
+      notEmpty: { args: true, msg: 'Debe ingresar un Codigo para asignar el Turno al Vehiculo' },
+      isNumeric: { args: true, msg: 'El Codigo para asignar el Turno al Vehiculo debe tener solo numeros' }
+    }
+  },
+
   turno: {
     type: Sequelize.STRING,
-    primaryKey: true,
     allowNull: false,
     validate: {
       notEmpty: { args: true, msg: 'Debe seleccionar un Codigo de Turno' }
@@ -16,7 +25,6 @@ const TurnoVehiculoSchema = {
 
   placa: {
     type: Sequelize.STRING,
-    primaryKey: true,
     allowNull: false,
     validate: {
       notEmpty: { args: true, msg: 'Debe seleccionar el Numero de Placa del Vehiculo' }
@@ -34,13 +42,12 @@ const TurnoVehiculoSchema = {
       isAfter: { args: moment().format('YYYY-MM-DD'), msg: 'La Fecha de Salida del Vehiculo que realizara el Turno debe ser posterior a la Fecha Actual' }
     },
     get: function () {
-      return moment(this.getDataValue('diaSalida'), 'EEE MMM dd yyyy HH:mm:ss (zzzz)').locale('es-ec').format('dddd, DD MMMM YYYY')
+      console.log('La fecha actual es: ' + moment().format('YYYY-MM-DD'))
+      return moment(this.getDataValue('diaSalida')).locale('es-ec').format('dddd, DD MMMM YYYY')
+    },
+    set: function (valDiaSalida) {
+      return this.setDataValue('diaSalida', moment(valDiaSalida))
     }
-    // set: function (valDiaSalida) {
-    //   let fecha = moment().format(`${valDiaSalida}THH:mm:ss:00Z`)
-    //   console.log('La fecha de salida es: ' + this.setDataValue('diaSalida', `${fecha}`))
-    //   return this.setDataValue('diaSalida', `${fecha}`)
-    // }
   }
 }
 

@@ -27,11 +27,11 @@ const FormaPagoSchema = {
   tipo: {
     type: Sequelize.STRING,
     allowNull: false,
+    defaultValue: 'TC',
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar un Tipo para la Forma de Pago' },
       is: { args: ['^[a-z ]+$', 'i'], msg: 'El Tipo para la Forma de Pago debe tener solo letras' }
-    },
-    set: function (valTipo) { return this.setDataValue('tipo', 'TC') }
+    }
   },
 
   nombreTarjeta: {

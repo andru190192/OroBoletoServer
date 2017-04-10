@@ -82,7 +82,7 @@ CREATE SCHEMA oroticket AUTHORIZATION orocodigo;
 
 --DOMINIOS--
 
-CREATE DOMAIN oroticket.asiento 									AS character varying(2);
+CREATE DOMAIN oroticket.asiento 									AS integer;
 CREATE DOMAIN oroticket.cedula_ruc 								AS character varying(13);
 CREATE DOMAIN oroticket.codigo 										AS character varying(5);
 CREATE DOMAIN oroticket.codigo_seguridad_tarjeta 	AS character varying(4);
@@ -95,12 +95,12 @@ CREATE DOMAIN oroticket.hora 											AS character varying(5);
 CREATE DOMAIN oroticket.nombre 										AS character varying(300);
 CREATE DOMAIN oroticket.nombre_apellido 					AS character varying(150);
 CREATE DOMAIN oroticket.numero_factura 						AS character varying(17);
-CREATE DOMAIN oroticket.numero_disco 							AS character varying(3);
+CREATE DOMAIN oroticket.numero_disco 							AS integer;
 CREATE DOMAIN oroticket.numero_tarjeta 						AS character varying(16);
 CREATE DOMAIN oroticket.placa 										AS character varying(9);
 CREATE DOMAIN oroticket.rol 											AS character varying(6);
 CREATE DOMAIN oroticket.telefono 									AS character varying(10);
-CREATE DOMAIN oroticket.tipo_forma_pago			 			AS character varying(2);
+CREATE DOMAIN oroticket.tipo_forma_pago			 			AS character varying(2)					DEFAULT 'TC';
 CREATE DOMAIN oroticket.usuario 									AS character varying(30);
 
 ALTER DOMAIN oroticket.asiento 										OWNER TO orocodigo;

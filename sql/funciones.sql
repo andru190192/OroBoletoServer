@@ -5,6 +5,7 @@
 
 DROP TYPE IF EXISTS oroticket.tipo_ciudad_origen_destino CASCADE;
 DROP TYPE IF EXISTS oroticket.tipo_turno CASCADE;
+DROP TYPE IF EXISTS oroticket.tipo_vehiculo_asientos CASCADE;
 
 CREATE TYPE oroticket.tipo_ciudad_origen_destino AS
   (nombre oroticket.nombre);
@@ -19,8 +20,17 @@ CREATE TYPE oroticket.tipo_turno AS
    valor        oroticket.dinero,
    asientos     oroticket.asiento);
 
+CREATE TYPE oroticket.tipo_vehiculo_asientos AS
+  (placa                oroticket.placa,
+   tipo                 oroticket.nombre,
+   numero_asientos      oroticket.asiento,
+   numero_disco         oroticket.numero_disco,
+   chofer               oroticket.nombre,
+   asientos_vendidos[]  oroticket.asiento);
+
 ALTER TYPE oroticket.tipo_ciudad_origen_destino OWNER TO orocodigo;
 ALTER TYPE oroticket.tipo_turno OWNER TO orocodigo;
+ALTER TYPE oroticket.tipo_vehiculo_asientos OWNER TO orocodigo;
 
 
 --FUNCIONES--
@@ -28,6 +38,7 @@ ALTER TYPE oroticket.tipo_turno OWNER TO orocodigo;
 -- DROP FUNCTION oroticket.fun_ciudad_origen();
 -- DROP FUNCTION oroticket.fun_ciudad_destino(text);
 -- DROP FUNCTION oroticket.fun_turno(text, text, date);
+-- DROP FUNCTION oroticket.fun_vehiculo_asientos(text, date);
 -- DROP FUNCTION oroticket.fun_forma_pago(text, integer);
 
 CREATE OR REPLACE FUNCTION oroticket.fun_ciudad_origen()
@@ -120,6 +131,37 @@ ALTER FUNCTION oroticket.fun_turno(text, text, date) OWNER TO orocodigo;
 -- SELECT * FROM oroticket.fun_turno('MACHALA', 'GUAYAQUIL', '2017-03-29')
 
 
+CREATE OR REPLACE FUNCTION oroticket.fun_vehiculo_asientos(text, date)
+  RETURNS SETOF oroticket.tipo_vehiculo_asientos AS
+$BODY$
+DECLARE
+  p_turno     ALIAS FOR $1;
+  p_fecha     ALIAS FOR $2;
+
+  cursor_forma_pago oroticket.tipo_vehiculo_asientos%ROWTYPE;
+  sql text;
+BEGIN
+  sql := $$SELECT v.*, array(SELECT numero_asiento::text FROM oroticket.detalle_boleto db WHERE db.turno_vehiculo =  tv.id) as asientos_vendidos
+  FROM oroticket.turno_vehiculo tv
+  inner join oroticket.vehiculo v on (tv.placa = v.placa)
+  where tv.turno='$$ || p_turno || $$' and tv.dia_salida = '$$ || p_fecha || $$';$$;
+  RAISE NOTICE '%',sql;
+
+  FOR cursor_forma_pago IN EXECUTE sql
+  LOOP
+      RETURN NEXT cursor_forma_pago;
+  END LOOP;
+  RETURN;
+END;
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100
+  ROWS 1000;
+ALTER FUNCTION oroticket.fun_vehiculo_asientos(text, date) OWNER TO orocodigo;
+
+-- SELECT * FROM oroticket.fun_vehiculo_asientos('ORMG7', '2017-04-07')
+
+
 CREATE OR REPLACE FUNCTION oroticket.fun_forma_pago(text, integer)
   RETURNS SETOF oroticket.forma_pago AS
 $BODY$
@@ -150,7 +192,6 @@ $BODY$
 ALTER FUNCTION oroticket.fun_forma_pago(text, integer) OWNER TO orocodigo;
 
 -- SELECT * FROM oroticket.fun_forma_pago(null, 1)
-
 
 --TRIGGERS--
 
@@ -213,6 +254,9 @@ CREATE TRIGGER tri_ruta_actualizar_hora_llegada_turno
 --CHECK - UNIQUE CONSTRAINT--
 
 ALTER TABLE oroticket.boleto DROP CONSTRAINT chk_validar_forma_pago;
+ALTER DOMAIN oroticket.codigo_seguridad_tarjeta DROP CONSTRAINT chk_validar_codigo_seguridad_tarjeta;
+ALTER DOMAIN oroticket.numero_tarjeta DROP CONSTRAINT chk_validar_numero_tarjeta;
+
 ALTER TABLE oroticket.turno_vehiculo DROP CONSTRAINT uni_turno_placa_dia_salida;
 ALTER TABLE oroticket.forma_pago DROP CONSTRAINT uni_cliente_numero_tarjeta;
 
@@ -239,6 +283,11 @@ $BODY$
 ALTER TABLE oroticket.boleto ADD CONSTRAINT chk_validar_forma_pago
   CHECK (oroticket.chk_validar_forma_pago(forma_pago, cliente));
 
+ALTER DOMAIN oroticket.codigo_seguridad_tarjeta ADD CONSTRAINT chk_validar_codigo_seguridad_tarjeta
+  CHECK (LENGTH(VALUE)>=3 AND LENGTH(VALUE)<=4);
+
+ALTER DOMAIN oroticket.numero_tarjeta ADD CONSTRAINT chk_validar_numero_tarjeta
+  CHECK (LENGTH(VALUE)>=15 AND LENGTH(VALUE)<=16);
 
 ALTER TABLE oroticket.turno_vehiculo ADD CONSTRAINT uni_turno_placa_dia_salida UNIQUE (turno, placa, dia_salida);
 ALTER TABLE oroticket.forma_pago ADD CONSTRAINT uni_cliente_numero_tarjeta UNIQUE (cliente, numero_tarjeta);

@@ -1,5 +1,6 @@
 'use strict'
 
+const { sequelize } = require('../models/sequelizeConf')
 const FormaPago = require('../models/formaPago')
 const Persona = require('../models/persona')
 

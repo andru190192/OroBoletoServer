@@ -26,7 +26,7 @@ CREATE TYPE oroticket.tipo_vehiculo_asientos AS
    numero_asientos      oroticket.asiento,
    numero_disco         oroticket.numero_disco,
    chofer               oroticket.nombre,
-   asientos_vendidos[]  oroticket.asiento);
+   asientos_vendidos    oroticket.asiento_arr);
 
 ALTER TYPE oroticket.tipo_ciudad_origen_destino OWNER TO orocodigo;
 ALTER TYPE oroticket.tipo_turno OWNER TO orocodigo;
@@ -102,7 +102,7 @@ BEGIN
   LPAD(EXTRACT(hour FROM t.hora_salida)::text, 2, '0') || ':' || LPAD(EXTRACT(minute FROM t.hora_salida)::text, 2, '0') AS hora_salida,
   LPAD(EXTRACT(hour FROM t.hora_llegada)::text, 2, '0') || ':' || LPAD(EXTRACT(minute FROM t.hora_llegada)::text, 2, '0') AS hora_llegada,
   LPAD(EXTRACT(hour FROM r.tiempo_viaje)::text, 2, '0') || ':' || LPAD(EXTRACT(minute FROM r.tiempo_viaje)::text, 2, '0') AS tiempo_viaje,
-  paradas, valor, '0'
+  paradas, valor, 0
   FROM oroticket.turno t
   INNER JOIN oroticket.ruta r on (t.cooperativa = r.cooperativa and t.origen = r.origen and t.destino = r.destino)
   INNER JOIN oroticket.cooperativa c on (c.codigo = t.cooperativa)
@@ -111,15 +111,17 @@ BEGIN
   $$ORDER BY hora_salida, tiempo_viaje;$$;
   RAISE NOTICE '%',sql;
 
+  ALTER DOMAIN oroticket.asiento DROP CONSTRAINT chk_validar_asiento;
   FOR cursor_turno IN EXECUTE sql
   LOOP
-      cursor_turno.asientos := CAST(v.numero_asientos AS integer) - (SELECT COUNT(db.turno_vehiculo) FROM oroticket.detalle_boleto db WHERE db.turno_vehiculo = tv.id)
+      cursor_turno.asientos := v.numero_asientos - (SELECT COUNT(db.turno_vehiculo) FROM oroticket.detalle_boleto db WHERE db.turno_vehiculo = tv.id)
                                 FROM oroticket.turno_vehiculo tv
                                 INNER JOIN oroticket.vehiculo v ON (v.placa =  tv.placa)
                                 WHERE tv.turno = cursor_turno.codigo and tv.dia_salida = p_fecha;
-      cursor_turno.asientos := COALESCE(cursor_turno.asientos, '0');
+      cursor_turno.asientos := COALESCE(cursor_turno.asientos, 0);
       RETURN NEXT cursor_turno;
   END LOOP;
+  ALTER DOMAIN oroticket.asiento ADD CONSTRAINT chk_validar_asiento CHECK (VALUE>=1 AND VALUE<=99);
   RETURN;
 END;
 $BODY$
@@ -128,7 +130,7 @@ $BODY$
   ROWS 1000;
 ALTER FUNCTION oroticket.fun_turno(text, text, date) OWNER TO orocodigo;
 
--- SELECT * FROM oroticket.fun_turno('MACHALA', 'GUAYAQUIL', '2017-03-29')
+-- SELECT * FROM oroticket.fun_turno('MACHALA', 'GUAYAQUIL', '2017-04-07')
 
 
 CREATE OR REPLACE FUNCTION oroticket.fun_vehiculo_asientos(text, date)
@@ -141,7 +143,7 @@ DECLARE
   cursor_forma_pago oroticket.tipo_vehiculo_asientos%ROWTYPE;
   sql text;
 BEGIN
-  sql := $$SELECT v.*, array(SELECT numero_asiento::text FROM oroticket.detalle_boleto db WHERE db.turno_vehiculo =  tv.id) as asientos_vendidos
+  sql := $$SELECT v.*, array(SELECT numero_asiento::integer FROM oroticket.detalle_boleto db WHERE db.turno_vehiculo =  tv.id) as asientos_vendidos
   FROM oroticket.turno_vehiculo tv
   inner join oroticket.vehiculo v on (tv.placa = v.placa)
   where tv.turno='$$ || p_turno || $$' and tv.dia_salida = '$$ || p_fecha || $$';$$;
@@ -256,6 +258,8 @@ CREATE TRIGGER tri_ruta_actualizar_hora_llegada_turno
 ALTER TABLE oroticket.boleto DROP CONSTRAINT chk_validar_forma_pago;
 ALTER DOMAIN oroticket.codigo_seguridad_tarjeta DROP CONSTRAINT chk_validar_codigo_seguridad_tarjeta;
 ALTER DOMAIN oroticket.numero_tarjeta DROP CONSTRAINT chk_validar_numero_tarjeta;
+ALTER DOMAIN oroticket.asiento DROP CONSTRAINT chk_validar_asiento;
+ALTER DOMAIN oroticket.numero_disco DROP CONSTRAINT chk_validar_numero_disco;
 
 ALTER TABLE oroticket.turno_vehiculo DROP CONSTRAINT uni_turno_placa_dia_salida;
 ALTER TABLE oroticket.forma_pago DROP CONSTRAINT uni_cliente_numero_tarjeta;
@@ -288,6 +292,13 @@ ALTER DOMAIN oroticket.codigo_seguridad_tarjeta ADD CONSTRAINT chk_validar_codig
 
 ALTER DOMAIN oroticket.numero_tarjeta ADD CONSTRAINT chk_validar_numero_tarjeta
   CHECK (LENGTH(VALUE)>=15 AND LENGTH(VALUE)<=16);
+
+ALTER DOMAIN oroticket.asiento ADD CONSTRAINT chk_validar_asiento
+  CHECK (VALUE>=1 AND VALUE<=99);
+
+ALTER DOMAIN oroticket.numero_disco ADD CONSTRAINT chk_validar_numero_disco
+  CHECK (VALUE > 0 AND VALUE<=999);
+
 
 ALTER TABLE oroticket.turno_vehiculo ADD CONSTRAINT uni_turno_placa_dia_salida UNIQUE (turno, placa, dia_salida);
 ALTER TABLE oroticket.forma_pago ADD CONSTRAINT uni_cliente_numero_tarjeta UNIQUE (cliente, numero_tarjeta);

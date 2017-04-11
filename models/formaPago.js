@@ -84,7 +84,7 @@ const FormaPagoSchema = {
       // Si se presentan problemas por tarjetas vencidas, aumentar n dias a la fecha actual.
     },
     get: function () {
-      return moment(this.getDataValue('fechaVencimiento')).format('YYYY-MM-DD')
+      return moment(this.getDataValue('fechaVencimiento')).format('YYYY-MM')
     }
   },
 

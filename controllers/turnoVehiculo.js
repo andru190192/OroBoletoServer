@@ -1,8 +1,10 @@
 'use strict'
 
+const { sequelize } = require('../models/sequelizeConf')
 const TurnoVehiculo = require('../models/turnoVehiculo')
 const Turno = require('../models/turno')
 const Vehiculo = require('../models/vehiculo')
+const Persona = require('../models/persona')
 
 function getTurnoVehiculo (req, res) {
   let turnoVehiculoId = req.params.turnoVehiculoId
@@ -20,6 +22,24 @@ function getTurnosVehiculos (req, res) {
   .then(turnosVehiculos => {
     if (turnosVehiculos.length <= 0) return res.status(404).send({ message: `El Turno con Codigo: ${turnoId} no esta asignado a ningun Vehiculo` })
     res.status(200).send({ turnosVehiculos })
+  })
+  .catch(err => res.status(500).send({ message: `Error al realizar la consulta: ${err}` }))
+}
+
+function getTurnosVehiculoPorFecha (req, res) {
+  let turnoId = req.params.turnoId.toUpperCase()
+  let fecha = req.params.fecha
+  sequelize.query(`SELECT * FROM oroticket.fun_vehiculo_asientos('${turnoId}', '${fecha}');`, { type: sequelize.QueryTypes.SELECT })
+  .then(vehiculoAsientos => {
+    if (vehiculoAsientos.length <= 0) return res.status(404).send({ message: `No hay Vehiculo disponibles para la Fecha: ${fecha} con el Turno: ${turnoId}` })
+    vehiculoAsientos = vehiculoAsientos[0]
+    Persona.findById(vehiculoAsientos.chofer)
+    .then(chofer => {
+      if (!chofer) return res.status(404).send({ message: `El chofer con el numero de identificacion '${vehiculoAsientos.chofer}' no existe` })
+      vehiculoAsientos.chofer = chofer
+      res.status(200).send({ vehiculoAsientos })
+    })
+    .catch(err => res.status(500).send({ message: `Error al realizar la consulta: ${err}` }))
   })
   .catch(err => res.status(500).send({ message: `Error al realizar la consulta: ${err}` }))
 }
@@ -75,6 +95,7 @@ function deleteTurnoVehiculo (req, res) {
 module.exports = {
   getTurnoVehiculo,
   getTurnosVehiculos,
+  getTurnosVehiculoPorFecha,
   saveTurnoVehiculo,
   updateTurnoVehiculo,
   deleteTurnoVehiculo

@@ -25,7 +25,7 @@ const VehiculoSchema = {
   },
 
   numeroAsientos: {
-    type: Sequelize.STRING,
+    type: Sequelize.INTEGER,
     field: 'numero_asientos',
     allowNull: false,
     validate: {
@@ -36,7 +36,7 @@ const VehiculoSchema = {
   },
 
   numeroDisco: {
-    type: Sequelize.STRING,
+    type: Sequelize.INTEGER,
     field: 'numero_disco',
     allowNull: false,
     validate: {

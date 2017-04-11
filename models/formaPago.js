@@ -30,7 +30,8 @@ const FormaPagoSchema = {
     defaultValue: 'TC',
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar un Tipo para la Forma de Pago' },
-      is: { args: ['^[a-z ]+$', 'i'], msg: 'El Tipo para la Forma de Pago debe tener solo letras' }
+      is: { args: ['^[a-z ]+$', 'i'], msg: 'El Tipo para la Forma de Pago debe tener solo letras' },
+      len: { args: 2, msg: 'El Tipo para la Forma de Pago debe tener solo 2 caracteres' }
     }
   },
 
@@ -55,7 +56,6 @@ const FormaPagoSchema = {
       notEmpty: { args: true, msg: 'Debe ingresar el Numero de la Tarjeta de Credito' },
       isNumeric: { args: true, msg: 'El Numero de la Tarjeta de Credito no debe tener letras' },
       len: { args: [15, 16], msg: 'El Numero de la Tarjeta de Credito debe tener 16 digitos' }
-      // isUnique: isUnique('formaPago', 'numero_tarjeta')
     }
   },
 

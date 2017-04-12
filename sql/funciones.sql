@@ -13,6 +13,7 @@ CREATE TYPE oroticket.tipo_ciudad_origen_destino AS
 CREATE TYPE oroticket.tipo_turno AS
   (codigo       oroticket.codigo,
    cooperativa  oroticket.nombre,
+   url_logo     oroticket.nombre,
    hora_salida  oroticket.hora,
    hora_llegada oroticket.hora,
    tiempo_viaje oroticket.hora,
@@ -98,7 +99,7 @@ DECLARE
   cursor_turno oroticket.tipo_turno%ROWTYPE;
   sql text;
 BEGIN
-  sql := $$SELECT t.codigo, c.nombre,
+  sql := $$SELECT t.codigo, c.nombre, c.logo,
   LPAD(EXTRACT(hour FROM t.hora_salida)::text, 2, '0') || ':' || LPAD(EXTRACT(minute FROM t.hora_salida)::text, 2, '0') AS hora_salida,
   LPAD(EXTRACT(hour FROM t.hora_llegada)::text, 2, '0') || ':' || LPAD(EXTRACT(minute FROM t.hora_llegada)::text, 2, '0') AS hora_llegada,
   LPAD(EXTRACT(hour FROM r.tiempo_viaje)::text, 2, '0') || ':' || LPAD(EXTRACT(minute FROM r.tiempo_viaje)::text, 2, '0') AS tiempo_viaje,
@@ -260,6 +261,8 @@ ALTER DOMAIN oroticket.codigo_seguridad_tarjeta DROP CONSTRAINT chk_validar_codi
 ALTER DOMAIN oroticket.numero_tarjeta DROP CONSTRAINT chk_validar_numero_tarjeta;
 ALTER DOMAIN oroticket.asiento DROP CONSTRAINT chk_validar_asiento;
 ALTER DOMAIN oroticket.numero_disco DROP CONSTRAINT chk_validar_numero_disco;
+ALTER DOMAIN oroticket.esta_pto_emi DROP CONSTRAINT chk_validar_esta_pto_emi;
+ALTER DOMAIN oroticket.secuencia DROP CONSTRAINT chk_validar_secuencia;
 
 ALTER TABLE oroticket.turno_vehiculo DROP CONSTRAINT uni_turno_placa_dia_salida;
 ALTER TABLE oroticket.forma_pago DROP CONSTRAINT uni_cliente_numero_tarjeta;
@@ -298,6 +301,12 @@ ALTER DOMAIN oroticket.asiento ADD CONSTRAINT chk_validar_asiento
 
 ALTER DOMAIN oroticket.numero_disco ADD CONSTRAINT chk_validar_numero_disco
   CHECK (VALUE > 0 AND VALUE<=999);
+
+ALTER DOMAIN oroticket.esta_pto_emi ADD CONSTRAINT chk_validar_esta_pto_emi
+  CHECK (VALUE >= 1 AND VALUE<=999);
+
+ALTER DOMAIN oroticket.secuencia ADD CONSTRAINT chk_validar_secuencia
+  CHECK (VALUE >= 1 AND VALUE<=999999999);
 
 
 ALTER TABLE oroticket.turno_vehiculo ADD CONSTRAINT uni_turno_placa_dia_salida UNIQUE (turno, placa, dia_salida);

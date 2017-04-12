@@ -18,6 +18,7 @@ ALTER TABLE oroticket.boleto 					DROP CONSTRAINT boleto_numero_factura_cliente_
 ALTER TABLE oroticket.cooperativa 		DROP CONSTRAINT cooperativa_codigo_pk;
 ALTER TABLE oroticket.detalle_boleto 	DROP CONSTRAINT detalle_boleto_num_fac_cli_turno_vehi_num_asien_pk;
 ALTER TABLE oroticket.forma_pago 			DROP CONSTRAINT forma_pago_id_pk;
+ALTER TABLE oroticket.parametro 			DROP CONSTRAINT parametro_id_pk;
 ALTER TABLE oroticket.persona 				DROP CONSTRAINT persona_cedula_ruc_pk;
 ALTER TABLE oroticket.roles 					DROP CONSTRAINT roles_rol_pk;
 ALTER TABLE oroticket.rol_usuario 		DROP CONSTRAINT rol_usuario_rol_usuario_pk;
@@ -31,6 +32,7 @@ DROP TABLE oroticket.boleto;
 DROP TABLE oroticket.cooperativa;
 DROP TABLE oroticket.detalle_boleto;
 DROP TABLE oroticket.forma_pago;
+DROP TABLE oroticket.parametro;
 DROP TABLE oroticket.persona;
 DROP TABLE oroticket.roles;
 DROP TABLE oroticket.rol_usuario;
@@ -40,6 +42,7 @@ DROP TABLE oroticket.turno_vehiculo;
 DROP TABLE oroticket.vehiculo;
 
 DROP DOMAIN oroticket.asiento;
+DROP DOMAIN oroticket.asiento_arr;
 DROP DOMAIN oroticket.cedula_ruc;
 DROP DOMAIN oroticket.codigo;
 DROP DOMAIN oroticket.codigo_seguridad_tarjeta;
@@ -47,6 +50,7 @@ DROP DOMAIN oroticket.dinero;
 DROP DOMAIN oroticket.direccion;
 DROP DOMAIN oroticket.email;
 DROP DOMAIN oroticket.estado;
+DROP DOMAIN oroticket.esta_pto_emi;
 DROP DOMAIN oroticket.fecha;
 DROP DOMAIN oroticket.hora;
 DROP DOMAIN oroticket.nombre;
@@ -56,6 +60,7 @@ DROP DOMAIN oroticket.numero_factura;
 DROP DOMAIN oroticket.numero_tarjeta;
 DROP DOMAIN oroticket.placa;
 DROP DOMAIN oroticket.rol;
+DROP DOMAIN oroticket.secuencia;
 DROP DOMAIN oroticket.telefono;
 DROP DOMAIN oroticket.tipo_forma_pago;
 DROP DOMAIN oroticket.usuario;
@@ -91,6 +96,7 @@ CREATE DOMAIN oroticket.dinero 										AS numeric(9,2);
 CREATE DOMAIN oroticket.direccion 								AS character varying(300);
 CREATE DOMAIN oroticket.email 										AS character varying(50);
 CREATE DOMAIN oroticket.estado 										AS boolean					 						DEFAULT true;
+CREATE DOMAIN oroticket.esta_pto_emi 							AS integer;
 CREATE DOMAIN oroticket.fecha 										AS timestamp without time zone;
 CREATE DOMAIN oroticket.hora 											AS character varying(5);
 CREATE DOMAIN oroticket.nombre 										AS character varying(300);
@@ -100,6 +106,7 @@ CREATE DOMAIN oroticket.numero_disco 							AS integer;
 CREATE DOMAIN oroticket.numero_tarjeta 						AS character varying(16);
 CREATE DOMAIN oroticket.placa 										AS character varying(9);
 CREATE DOMAIN oroticket.rol 											AS character varying(6);
+CREATE DOMAIN oroticket.secuencia 								AS integer;
 CREATE DOMAIN oroticket.telefono 									AS character varying(10);
 CREATE DOMAIN oroticket.tipo_forma_pago			 			AS character varying(2)					DEFAULT 'TC';
 CREATE DOMAIN oroticket.usuario 									AS character varying(30);
@@ -113,6 +120,7 @@ ALTER DOMAIN oroticket.dinero 										OWNER TO orocodigo;
 ALTER DOMAIN oroticket.direccion 									OWNER TO orocodigo;
 ALTER DOMAIN oroticket.email 											OWNER TO orocodigo;
 ALTER DOMAIN oroticket.estado 										OWNER TO orocodigo;
+ALTER DOMAIN oroticket.esta_pto_emi 							OWNER TO orocodigo;
 ALTER DOMAIN oroticket.fecha 											OWNER TO orocodigo;
 ALTER DOMAIN oroticket.hora 											OWNER TO orocodigo;
 ALTER DOMAIN oroticket.nombre 										OWNER TO orocodigo;
@@ -122,21 +130,53 @@ ALTER DOMAIN oroticket.numero_factura 						OWNER TO orocodigo;
 ALTER DOMAIN oroticket.numero_tarjeta 						OWNER TO orocodigo;
 ALTER DOMAIN oroticket.placa 											OWNER TO orocodigo;
 ALTER DOMAIN oroticket.rol 												OWNER TO orocodigo;
+ALTER DOMAIN oroticket.secuencia 									OWNER TO orocodigo;
 ALTER DOMAIN oroticket.telefono 									OWNER TO orocodigo;
 ALTER DOMAIN oroticket.tipo_forma_pago				 		OWNER TO orocodigo;
 ALTER DOMAIN oroticket.usuario 										OWNER TO orocodigo;
 
 
---TABLAS - CONSTRAINT--
+--TABLAS--
+
+CREATE TABLE oroticket.parametro(
+	id		 									Serial					  			NOT NULL,
+	ruc 										oroticket.cedula_ruc 		NOT NULL,
+	nombre 									oroticket.nombre 				NOT NULL,
+	gerente 								oroticket.nombre 				NOT NULL,
+	telefono_matriz 				oroticket.telefono			NOT NULL,
+	direccion_matriz 				oroticket.nombre				NOT NULL,
+	correo 									oroticket.email					NOT NULL,
+	clave_correo  					oroticket.nombre				NOT NULL,
+	firma 									oroticket.nombre				NOT NULL,
+	clave_firma 						oroticket.nombre				NOT NULL,
+	ambiente_sri_produccion	oroticket.estado				NOT NULL,
+	logo 										oroticket.nombre				NOT NULL,
+	nombre_ride 						oroticket.nombre				NOT NULL,
+	establecimiento 				oroticket.esta_pto_emi	NOT NULL,
+	pto_emision 						oroticket.esta_pto_emi	NOT NULL,
+	secuencia 							oroticket.secuencia     NOT NULL,
+	ganacia 								oroticket.dinero		    NOT NULL,
+	comision_fija 					oroticket.dinero		    NOT NULL,
+	comision_porcentaje 		oroticket.dinero		    NOT NULL,
+	iva 										oroticket.dinero		    NOT NULL
+);
 
 CREATE TABLE oroticket.cooperativa(
-	codigo 		oroticket.codigo 			NOT NULL,
-	ruc 			oroticket.cedula_ruc 	NOT NULL,
-	nombre 		oroticket.nombre 			NOT NULL,
-	gerente 	oroticket.nombre 			NOT NULL,
-	telefono 	oroticket.telefono,
-	correo 		oroticket.email,
-	matriz 		oroticket.nombre
+	codigo 						oroticket.codigo 				NOT NULL,
+	ruc 							oroticket.cedula_ruc 		NOT NULL,
+	nombre 						oroticket.nombre 				NOT NULL,
+	gerente 					oroticket.nombre 				NOT NULL,
+	telefono_matriz 	oroticket.telefono			NOT NULL,
+	direccion_matriz 	oroticket.nombre				NOT NULL,
+	correo 						oroticket.email					NOT NULL,
+	clave_correo  		oroticket.nombre				NOT NULL,
+	firma 						oroticket.nombre				NOT NULL,
+	clave_firma 			oroticket.nombre				NOT NULL,
+	logo 							oroticket.nombre				NOT NULL,
+	nombre_ride 			oroticket.nombre				NOT NULL,
+	establecimiento 	oroticket.esta_pto_emi	NOT NULL,
+	pto_emision 			oroticket.esta_pto_emi	NOT NULL,
+	secuencia 				oroticket.secuencia     NOT NULL
 );
 
 CREATE TABLE oroticket.ruta(
@@ -226,11 +266,14 @@ CREATE TABLE oroticket.bitacora(
 );
 
 
+--CONSTRAINT--
+
 ALTER TABLE oroticket.bitacora 	    	ADD CONSTRAINT bitacora_id_pk 										                  PRIMARY KEY (id);
 ALTER TABLE oroticket.boleto 			    ADD CONSTRAINT boleto_numero_factura_cliente_pk 					          PRIMARY KEY (numero_factura, cliente);
 ALTER TABLE oroticket.cooperativa 		ADD CONSTRAINT cooperativa_codigo_pk 								                PRIMARY KEY (codigo);
 ALTER TABLE oroticket.detalle_boleto 	ADD CONSTRAINT detalle_boleto_num_fac_cli_turno_vehi_num_asien_pk 	PRIMARY KEY (numero_factura, cliente, turno_vehiculo, numero_asiento);
 ALTER TABLE oroticket.forma_pago 		  ADD CONSTRAINT forma_pago_id_pk 									                  PRIMARY KEY (id);
+ALTER TABLE oroticket.parametro 		  ADD CONSTRAINT parametro_id_pk 								          			      PRIMARY KEY (id);
 ALTER TABLE oroticket.persona 			  ADD CONSTRAINT persona_cedula_ruc_pk 								                PRIMARY KEY (cedula_ruc);
 ALTER TABLE oroticket.roles 			    ADD CONSTRAINT roles_rol_pk 										                    PRIMARY KEY (rol);
 ALTER TABLE oroticket.rol_usuario 		ADD CONSTRAINT rol_usuario_rol_usuario_pk 							            PRIMARY KEY (rol, usuario);
@@ -238,7 +281,6 @@ ALTER TABLE oroticket.ruta 			      ADD CONSTRAINT ruta_cooperativa_origen_desti
 ALTER TABLE oroticket.turno 			    ADD CONSTRAINT turno_codigo_pk 										                  PRIMARY KEY (codigo);
 ALTER TABLE oroticket.turno_vehiculo 	ADD CONSTRAINT turno_vehiculo_id_pk 											      		PRIMARY KEY (id);
 ALTER TABLE oroticket.vehiculo 		    ADD CONSTRAINT vehiculo_placa_pk 									                  PRIMARY KEY (placa);
-
 
 ALTER TABLE oroticket.boleto 			    ADD CONSTRAINT boleto_cliente_pfk 							          FOREIGN KEY (cliente) 						          REFERENCES oroticket.persona (cedula_ruc) 					    			  MATCH FULL  ON UPDATE CASCADE  ON DELETE NO ACTION;
 ALTER TABLE oroticket.boleto 			    ADD CONSTRAINT boleto_forma_pago_fk 						          FOREIGN KEY (forma_pago) 					          REFERENCES oroticket.forma_pago (id) 						        			  MATCH FULL  ON UPDATE CASCADE  ON DELETE NO ACTION;
@@ -258,6 +300,7 @@ ALTER TABLE oroticket.boleto 			    OWNER TO orocodigo;
 ALTER TABLE oroticket.cooperativa 		OWNER TO orocodigo;
 ALTER TABLE oroticket.detalle_boleto 	OWNER TO orocodigo;
 ALTER TABLE oroticket.forma_pago 		  OWNER TO orocodigo;
+ALTER TABLE oroticket.parametro 		  OWNER TO orocodigo;
 ALTER TABLE oroticket.persona 			  OWNER TO orocodigo;
 ALTER TABLE oroticket.roles 			    OWNER TO orocodigo;
 ALTER TABLE oroticket.rol_usuario 		OWNER TO orocodigo;

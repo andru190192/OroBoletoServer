@@ -8,10 +8,7 @@ const FormaPagoSchema = {
     type: Sequelize.INTEGER,
     primaryKey: true,
     allowNull: false,
-    validate: {
-      notEmpty: { args: true, msg: 'Debe ingresar un Codigo para la Forma de Pago' },
-      isNumeric: { args: true, msg: 'El Codigo para la Forma de Pago debe tener solo numeros' }
-    }
+    autoIncrement: true
   },
 
   cliente: {

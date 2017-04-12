@@ -4,9 +4,10 @@ const { Sequelize, sequelize } = require('./sequelizeConf')
 
 const BitacoraSchema = {
   id: {
-    type: Sequelize.STRING,
+    type: Sequelize.INTEGER,
     primaryKey: true,
-    allowNull: false
+    allowNull: false,
+    autoIncrement: true
   },
   detalle: {
     type: Sequelize.STRING,

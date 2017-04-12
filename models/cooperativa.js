@@ -46,10 +46,10 @@ const CooperativaSchema = {
     set: function (valGerente) { return this.setDataValue('gerente', valGerente.toUpperCase()) }
   },
 
-  telefono: {
+  telefonoMatriz: {
     type: Sequelize.STRING,
-    allowNull: true,
-    defaultValue: null,
+    field: 'telefono_matriz',
+    allowNull: false,
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar un Numero de Telefono para la Cooperativa' },
       isNumeric: { args: true, msg: 'El Numero de Telefono para la Cooperativa no debe tener letras' },
@@ -57,27 +57,99 @@ const CooperativaSchema = {
     }
   },
 
+  direccionMatriz: {
+    type: Sequelize.STRING,
+    field: 'direccion_matriz',
+    allowNull: false,
+    validate: {
+      notEmpty: { args: true, msg: 'Debe ingresar la Direccion de la oficina matriz de la Cooperativa' }
+    },
+    set: function (valMatriz) { return this.setDataValue('matriz', valMatriz.toUpperCase()) }
+  },
+
   correo: {
     type: Sequelize.STRING,
-    allowNull: true,
-    defaultValue: null,
+    allowNull: false,
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar un Correo Electronico para la Cooperativa' },
       isEmail: { args: true, msg: 'El Correo Electronico ingresado no es valido' },
+      len: { args: [1, 50], msg: 'El Correo Electronico no debe tener mas de 50 caracteres' },
       isUnique: isUnique('cooperativa', 'correo')
     },
     set: function (valCorreo) { return this.setDataValue('correo', valCorreo.toLowerCase()) }
   },
 
-  matriz: {
+  claveCorreo: {
     type: Sequelize.STRING,
-    allowNull: true,
-    defaultValue: null,
+    field: 'clave_correo',
+    allowNull: false,
     validate: {
-      notEmpty: { args: true, msg: 'Debe ingresar la Direccion de la oficina matriz de la Cooperativa' }
-    },
-    set: function (valMatriz) { return this.setDataValue('matriz', valMatriz.toUpperCase()) }
+      notEmpty: { args: true, msg: 'Debe ingresar la Clave del Correo Electronico' }
+    }
+  },
+
+  firma: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    validate: {
+      notEmpty: { args: true, msg: 'Debe ingresar el Nombre de la Firma Electronica' }
+    }
+  },
+
+  claveFirma: {
+    type: Sequelize.STRING,
+    field: 'clave_firma',
+    allowNull: false,
+    validate: {
+      notEmpty: { args: true, msg: 'Debe ingresar el La Clave de la Firma Electronica' }
+    }
+  },
+
+  logo: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    validate: {
+      notEmpty: { args: true, msg: 'Debe ingresar la URL del Logo de la Cooperativa' }
+    }
+  },
+
+  nombreRide: {
+    type: Sequelize.STRING,
+    field: 'nombre_ride',
+    allowNull: false,
+    validate: {
+      notEmpty: { args: true, msg: 'Debe ingresar el Nombre del Ride de la Cooperativa' }
+    }
+  },
+
+  establecimiento: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    validate: {
+      notEmpty: { args: true, msg: 'Debe ingresar el Numero de Establecimiento' },
+      isNumeric: { args: true, msg: 'El Numero de Establecimiento no debe tener letras' }
+    }
+  },
+
+  ptoEmision: {
+    type: Sequelize.INTEGER,
+    field: 'pto_emision',
+    allowNull: false,
+    validate: {
+      notEmpty: { args: true, msg: 'Debe ingresar el Punto de Emision' },
+      isNumeric: { args: true, msg: 'El Punto de Emision no debe tener letras' }
+    }
+  },
+
+  secuencia: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    validate: {
+      notEmpty: { args: true, msg: 'Debe ingresar el Numero de Secuencia' },
+      isNumeric: { args: true, msg: 'El Numero de Secuencia no debe tener letras' }
+    }
   }
+
 }
 
 module.exports = sequelize.define(

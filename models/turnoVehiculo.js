@@ -8,10 +8,7 @@ const TurnoVehiculoSchema = {
     type: Sequelize.INTEGER,
     primaryKey: true,
     allowNull: false,
-    validate: {
-      notEmpty: { args: true, msg: 'Debe ingresar un Codigo para asignar el Turno al Vehiculo' },
-      isNumeric: { args: true, msg: 'El Codigo para asignar el Turno al Vehiculo debe tener solo numeros' }
-    }
+    autoIncrement: true
   },
 
   turno: {

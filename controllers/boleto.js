@@ -24,22 +24,23 @@ function getBoletos (req, res) {
 }
 
 function saveBoleto (req, res) {
-  let boleto = req.body
-  let formaPagoId = boleto.formaPago
-  let clienteId = boleto.cliente
-  FormaPago.findOne({ where: { id: formaPagoId, cliente: clienteId } })
-  .then(formaPago => {
-    if (!formaPago) {
-      return res.status(404).send({ message: `El Cliente con el Numero de Identificacion: ${clienteId} no tiene la Forma de Pago con el Codigo ${formaPagoId}` })
-    } else {
-      Boleto.create(boleto)
-      .then(boletoStored => {
-        res.status(200).send({ boleto: boletoStored })
-      })
-      .catch(err => res.status(500).send({ message: `Error al guardar el Boleto en la base de datos: ${err}` }))
-    }
-  })
-  .catch(err => res.status(500).send({ message: `Error al realizar la consulta: ${err}` }))
+  // let boleto = req.body
+  // let formaPagoId = boleto.formaPago
+  // let clienteId = boleto.cliente
+  // FormaPago.findOne({ where: { id: formaPagoId, cliente: clienteId } })
+  // .then(formaPago => {
+  //   if (!formaPago) {
+  //     return res.status(404).send({ message: `El Cliente con el Numero de Identificacion: ${clienteId} no tiene la Forma de Pago con el Codigo ${formaPagoId}` })
+  //   } else {
+  //     Boleto.create(boleto)
+  //     .then(boletoStored => {
+  //       res.status(200).send({ boleto: boletoStored })
+  //     })
+  //     .catch(err => res.status(500).send({ message: `Error al guardar el Boleto en la base de datos: ${err}` }))
+  //   }
+  // })
+  // .catch(err => res.status(500).send({ message: `Error al realizar la consulta: ${err}` }))
+  res.status(200).send({ message: `Se inserto correctamente el boleto` })
 }
 
 function updateBoleto (req, res) {

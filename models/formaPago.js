@@ -29,7 +29,8 @@ const FormaPagoSchema = {
       notEmpty: { args: true, msg: 'Debe ingresar un Tipo para la Forma de Pago' },
       is: { args: ['^[a-z ]+$', 'i'], msg: 'El Tipo para la Forma de Pago debe tener solo letras' },
       len: { args: 2, msg: 'El Tipo para la Forma de Pago debe tener solo 2 caracteres' }
-    }
+    },
+    set: function (valTipo) { return this.setDataValue('tipo', valTipo.toUpperCase()) }
   },
 
   nombreTarjeta: {
@@ -64,7 +65,7 @@ const FormaPagoSchema = {
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar el Codigo de Seguridad de la Tarjeta de Credito' },
       isNumeric: { args: true, msg: 'El Codigo de Seguridad de la Tarjeta de Credito no debe tener letras' },
-      len: { args: [3, 4], msg: 'El Codigo de Seguridad de la Tarjeta de Credito debe tener 3 digitos' }
+      len: { args: [3, 4], msg: 'El Codigo de Seguridad de la Tarjeta de Credito debe tener 3 - 4 digitos' }
     }
   },
 

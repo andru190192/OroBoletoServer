@@ -7,8 +7,7 @@ const TurnoSchema = {
   codigo: {
     type: Sequelize.STRING,
     primaryKey: true,
-    allowNull: true,
-    defaultValue: null,
+    allowNull: false,
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar un Codigo para el Turno' }
     },

@@ -60,7 +60,8 @@ const PersonaSchema = {
     allowNull: false,
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar su Correo Electronico' },
-      isEmail: { args: true, msg: 'El Correo Electronico ingresado no es valido' }
+      isEmail: { args: true, msg: 'El Correo Electronico ingresado no es valido' },
+      len: { args: [1, 50], msg: 'El Correo Electronico no debe tener mas de 50 caracteres' }
     },
     set: function (valEmail) { return this.setDataValue('email', valEmail.toLowerCase()) }
   },

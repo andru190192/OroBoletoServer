@@ -8,7 +8,8 @@ const RutaSchema = {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
-      notEmpty: { args: true, msg: 'Debe seleccionar una Cooperativa para asignar la Ruta' }
+      notEmpty: { args: true, msg: 'Debe seleccionar una Cooperativa para asignar la Ruta' },
+      len: { args: [3, 5], msg: 'El Codigo de la Cooperativa debe tener de 3 a 5 caracteres' }
     },
     set: function (valCooperativa) { return this.setDataValue('cooperativa', valCooperativa.toUpperCase()) }
   },

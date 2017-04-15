@@ -93,7 +93,8 @@ const CooperativaSchema = {
     allowNull: false,
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar el Nombre de la Firma Electronica' }
-    }
+    },
+    set: function (valFirma) { return this.setDataValue('firma', valFirma.toUpperCase()) }
   },
 
   claveFirma: {
@@ -101,7 +102,7 @@ const CooperativaSchema = {
     field: 'clave_firma',
     allowNull: false,
     validate: {
-      notEmpty: { args: true, msg: 'Debe ingresar el La Clave de la Firma Electronica' }
+      notEmpty: { args: true, msg: 'Debe ingresar la Clave de la Firma Electronica' }
     }
   },
 
@@ -119,7 +120,8 @@ const CooperativaSchema = {
     allowNull: false,
     validate: {
       notEmpty: { args: true, msg: 'Debe ingresar el Nombre del Ride de la Cooperativa' }
-    }
+    },
+    set: function (valNombreRide) { return this.setDataValue('nombreRide', valNombreRide.toUpperCase()) }
   },
 
   establecimiento: {

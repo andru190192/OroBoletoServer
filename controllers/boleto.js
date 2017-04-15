@@ -1,7 +1,7 @@
 'use strict'
 
 const Boleto = require('../models/boleto')
-const FormaPago = require('../models/formaPago')
+// const FormaPago = require('../models/formaPago')
 
 function getBoleto (req, res) {
   let boletoId = req.params.boletoId

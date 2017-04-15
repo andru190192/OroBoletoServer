@@ -83,6 +83,9 @@ const FormaPagoSchema = {
     },
     get: function () {
       return moment(this.getDataValue('fechaVencimiento')).format('YYYY-MM')
+    },
+    set: function (valFechaVencimiento) {
+      return this.setDataValue('fechaVencimiento', moment().format(`${valFechaVencimiento}-DDT00:00:00Z`))
     }
   },
 

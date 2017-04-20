@@ -13,9 +13,17 @@ function createToken (persona) {
   return jwt.encode(payload, config.secretToken)
 }
 
-function decodeToken (headers) {
-  const token = headers.authorization.split(' ')[1]
-  return jwt.decode(token, config.secretToken)
+function decodeToken (token) {
+  return new Promise((resolve, reject) => {
+    try {
+      const payload = jwt.decode(token, config.secretToken)
+      resolve(payload.sub)
+    } catch (err) {
+      let error = new Error('El token no es valido o ha expirado')
+      error.statusCode = 401
+      reject(error)
+    }
+  })
 }
 
 module.exports = {

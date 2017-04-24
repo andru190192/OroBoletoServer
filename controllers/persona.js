@@ -66,7 +66,8 @@ function updatePersona (req, res) {
   Persona.update(persona, { where: { cedula_ruc: personaId }, returning: true })
   .then((personaUpdate) => {
     if (personaUpdate[0] <= 0) return res.status(404).send({ message: `La persona con el numero de identificacion '${personaId}' no existe` })
-    res.status(200).send({ persona: personaUpdate[1] })
+    personaUpdate = personaUpdate[1]
+    res.status(200).send({ persona: personaUpdate[0] })
   })
   .catch(err => res.status(500).send({ message: `Error al actualizar la informacion de la persona en la base de datos: ${err}` })
   )

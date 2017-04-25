@@ -48,7 +48,7 @@ $BODY$
 DECLARE
   cursor_ciudad_origen oroticket.tipo_ciudad_origen_destino%ROWTYPE;
 BEGIN
-  FOR cursor_ciudad_origen IN EXECUTE $$SELECT DISTINCT origen FROM oroticket.ruta$$
+  FOR cursor_ciudad_origen IN EXECUTE $$SELECT DISTINCT origen FROM oroticket.ruta ORDER BY origen$$
   LOOP
       RETURN NEXT cursor_ciudad_origen;
   END LOOP;
@@ -72,7 +72,7 @@ DECLARE
   cursor_ciudad_destino oroticket.tipo_ciudad_origen_destino%ROWTYPE;
   sql text;
 BEGIN
-  sql := $$SELECT DISTINCT destino FROM oroticket.ruta WHERE origen ='$$ || p_origen || $$'$$;
+  sql := $$SELECT DISTINCT destino FROM oroticket.ruta WHERE origen ='$$ || p_origen || $$' ORDER BY destino$$;
   FOR cursor_ciudad_destino IN EXECUTE sql
   LOOP
       RETURN NEXT cursor_ciudad_destino;
